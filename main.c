@@ -143,30 +143,52 @@ void set_variable(char *name, double value, char *type, char *string_value) {
     
     int index = find_variable(name);
     if (index >= 0) {
+        // Mettre à jour variable existante
         current_lang.variables[index].value = value;
         strcpy(current_lang.variables[index].type, type);
-        if (string_value) {
+        if (string_value && strlen(string_value) < MAX_LINE) {
             strcpy(current_lang.variables[index].string_value, string_value);
+        } else if (strcmp(type, "string") == 0 && !string_value) {
+            strcpy(current_lang.variables[index].string_value, "");
+        }
+        
+        if (debug_mode) {
+            printf("[DEBUG] Variable '%s' mise à jour: %s = ", name, type);
+            if (strcmp(type, "string") == 0) {
+                printf("\"%s\"\n", current_lang.variables[index].string_value);
+            } else {
+                printf("%.6g\n", value);
+            }
         }
     } else if (current_lang.var_count < MAX_VARIABLES) {
+        // Créer nouvelle variable
+        if (strlen(name) >= MAX_TOKEN) {
+            printf("[ERREUR] Nom de variable trop long: %s\n", name);
+            return;
+        }
+        
         strcpy(current_lang.variables[current_lang.var_count].name, name);
         current_lang.variables[current_lang.var_count].value = value;
         strcpy(current_lang.variables[current_lang.var_count].type, type);
-        if (string_value) {
+        
+        if (string_value && strlen(string_value) < MAX_LINE) {
             strcpy(current_lang.variables[current_lang.var_count].string_value, string_value);
         } else {
             strcpy(current_lang.variables[current_lang.var_count].string_value, "");
         }
+        
         current_lang.var_count++;
         
         if (debug_mode) {
-            printf("[DEBUG] Variable '%s' creada: %s = ", name, type);
+            printf("[DEBUG] Variable '%s' créée: %s = ", name, type);
             if (strcmp(type, "string") == 0) {
                 printf("\"%s\"\n", string_value ? string_value : "");
             } else {
                 printf("%.6g\n", value);
             }
         }
+    } else {
+        printf("[ERREUR] Limite de variables atteinte (%d max)\n", MAX_VARIABLES);
     }
 }
 
@@ -414,6 +436,7 @@ void interpolate_string(char *input, char *output) {
             int var_len = end - start - 1;
             strncpy(var_name, start + 1, var_len);
             var_name[var_len] = '\0';
+            trim_whitespace(var_name);
             
             int var_index = find_variable(var_name);
             char replacement[MAX_TOKEN];
@@ -422,17 +445,50 @@ void interpolate_string(char *input, char *output) {
                 if (strcmp(current_lang.variables[var_index].type, "string") == 0) {
                     strcpy(replacement, current_lang.variables[var_index].string_value);
                 } else {
-                    sprintf(replacement, "%.6g", current_lang.variables[var_index].value);
+                    // Améliorer le formatage des nombres
+                    double val = current_lang.variables[var_index].value;
+                    if (val == (long long)val) {
+                        sprintf(replacement, "%.0f", val);
+                    } else {
+                        sprintf(replacement, "%.6g", val);
+                    }
                 }
             } else {
-                strcpy(replacement, "undefined");
+                // Vérifier si c'est une expression mathématique
+                double expr_result = evaluate_expression(var_name);
+                if (find_variable(var_name) == -1 && (isdigit(var_name[0]) || strchr(var_name, '+') || strchr(var_name, '-') || strchr(var_name, '*') || strchr(var_name, '/'))) {
+                    if (expr_result == (long long)expr_result) {
+                        sprintf(replacement, "%.0f", expr_result);
+                    } else {
+                        sprintf(replacement, "%.6g", expr_result);
+                    }
+                } else {
+                    sprintf(replacement, "[UNDEF:%s]", var_name);
+                    if (debug_mode) {
+                        printf("[DEBUG] Variable non définie: %s\n", var_name);
+                    }
+                }
             }
             
-            // Reemplazar en el string
-            memmove(start + strlen(replacement), end + 1, strlen(end + 1) + 1);
-            memcpy(start, replacement, strlen(replacement));
+            // Calculer les tailles pour éviter les dépassements de buffer
+            int replacement_len = strlen(replacement);
+            int var_placeholder_len = end - start + 1; // +1 pour inclure '}'
+            int remaining_len = strlen(end + 1);
             
-            start = strchr(start + strlen(replacement), '{');
+            // Vérifier que le buffer de sortie est assez grand
+            if (strlen(output) - var_placeholder_len + replacement_len < MAX_LINE - 1) {
+                // Déplacer le reste du string
+                memmove(start + replacement_len, end + 1, remaining_len + 1);
+                // Copier le remplacement
+                memcpy(start, replacement, replacement_len);
+                
+                start = strchr(start + replacement_len, '{');
+            } else {
+                if (debug_mode) {
+                    printf("[DEBUG] Buffer overflow évité lors de l'interpolation\n");
+                }
+                break;
+            }
         } else {
             break;
         }
@@ -440,6 +496,113 @@ void interpolate_string(char *input, char *output) {
 }
 
 void parse_lilou_definition(char *line);
+
+void map_custom_keyword_to_internal(char *line, char *output, char *custom_keyword) {
+    if (!line || !output || !custom_keyword) return;
+    
+    char *content = strchr(line, ':');
+    if (!content) {
+        strcpy(output, line);
+        return;
+    }
+    content++; // Skip the ':'
+    trim_whitespace(content);
+    
+    // Mapear mots-clés personnalisés vers commandes internes
+    if (strcmp(custom_keyword, "print") == 0 || 
+        strcmp(custom_keyword, "afficher") == 0 || 
+        strcmp(custom_keyword, "imprimir") == 0 ||
+        strcmp(custom_keyword, "display") == 0 ||
+        strcmp(custom_keyword, "show") == 0) {
+        snprintf(output, MAX_LINE, "mostrar: %s", content);
+    }
+    else if (strcmp(custom_keyword, "calc") == 0 || 
+             strcmp(custom_keyword, "calculate") == 0 ||
+             strcmp(custom_keyword, "calcular") == 0) {
+        snprintf(output, MAX_LINE, "calcular: %s", content);
+    }
+    else if (strcmp(custom_keyword, "var") == 0 || 
+             strcmp(custom_keyword, "variable") == 0 ||
+             strcmp(custom_keyword, "let") == 0 ||
+             strcmp(custom_keyword, "const") == 0) {
+        snprintf(output, MAX_LINE, "variable: %s", content);
+    }
+    else if (strcmp(custom_keyword, "if") == 0 || 
+             strcmp(custom_keyword, "si") == 0) {
+        snprintf(output, MAX_LINE, "si: %s", content);
+    }
+    else if (strcmp(custom_keyword, "then") == 0 || 
+             strcmp(custom_keyword, "alors") == 0 ||
+             strcmp(custom_keyword, "entonces") == 0) {
+        snprintf(output, MAX_LINE, "entonces: %s", content);
+    }
+    else if (strcmp(custom_keyword, "else") == 0 || 
+             strcmp(custom_keyword, "sinon") == 0 ||
+             strcmp(custom_keyword, "sino") == 0) {
+        snprintf(output, MAX_LINE, "sino: %s", content);
+    }
+    else if (strcmp(custom_keyword, "for") == 0 || 
+             strcmp(custom_keyword, "repeat") == 0 ||
+             strcmp(custom_keyword, "repetir") == 0) {
+        snprintf(output, MAX_LINE, "repetir: %s", content);
+    }
+    else if (strcmp(custom_keyword, "do") == 0 || 
+             strcmp(custom_keyword, "hacer") == 0 ||
+             strcmp(custom_keyword, "faire") == 0) {
+        snprintf(output, MAX_LINE, "hacer: %s", content);
+    }
+    else if (strcmp(custom_keyword, "while") == 0 || 
+             strcmp(custom_keyword, "mientras") == 0 ||
+             strcmp(custom_keyword, "pendant") == 0) {
+        snprintf(output, MAX_LINE, "mientras: %s", content);
+    }
+    else if (strcmp(custom_keyword, "function") == 0 || 
+             strcmp(custom_keyword, "func") == 0 ||
+             strcmp(custom_keyword, "def") == 0 ||
+             strcmp(custom_keyword, "funcion") == 0) {
+        snprintf(output, MAX_LINE, "funcion: %s", content);
+    }
+    else if (strcmp(custom_keyword, "call") == 0 || 
+             strcmp(custom_keyword, "invoke") == 0 ||
+             strcmp(custom_keyword, "llamar") == 0) {
+        snprintf(output, MAX_LINE, "llamar: %s", content);
+    }
+    else if (strcmp(custom_keyword, "input") == 0 || 
+             strcmp(custom_keyword, "ask") == 0 ||
+             strcmp(custom_keyword, "entrada") == 0) {
+        snprintf(output, MAX_LINE, "entrada: %s", content);
+    }
+    else if (strcmp(custom_keyword, "random") == 0 || 
+             strcmp(custom_keyword, "aleatorio") == 0) {
+        snprintf(output, MAX_LINE, "aleatorio: %s", content);
+    }
+    else if (strcmp(custom_keyword, "random_real") == 0 || 
+             strcmp(custom_keyword, "aleatorio_real") == 0) {
+        snprintf(output, MAX_LINE, "aleatorio_real: %s", content);
+    }
+    else if (strcmp(custom_keyword, "write_file") == 0 || 
+             strcmp(custom_keyword, "escribir_archivo") == 0) {
+        snprintf(output, MAX_LINE, "escribir_archivo: %s", content);
+    }
+    else if (strcmp(custom_keyword, "read_file") == 0 || 
+             strcmp(custom_keyword, "leer_archivo") == 0) {
+        snprintf(output, MAX_LINE, "leer_archivo: %s", content);
+    }
+    else if (strcmp(custom_keyword, "wait") == 0 || 
+             strcmp(custom_keyword, "sleep") == 0 ||
+             strcmp(custom_keyword, "esperar") == 0) {
+        snprintf(output, MAX_LINE, "esperar: %s", content);
+    }
+    else if (strcmp(custom_keyword, "clear") == 0 || 
+             strcmp(custom_keyword, "cls") == 0 ||
+             strcmp(custom_keyword, "limpiar_pantalla") == 0) {
+        snprintf(output, MAX_LINE, "limpiar_pantalla");
+    }
+    else {
+        // Pour les mots-clés non mappés, traiter comme affichage
+        snprintf(output, MAX_LINE, "mostrar: %s", content);
+    }
+}
 
 void parse_lilou_definition(char *line) {
     if (!line) return;
@@ -1032,8 +1195,14 @@ void execute_custom_language(char *lilou_file, char *code_file) {
             // Buscar en palabras clave definidas por el usuario
             if (!found) {
                 for (int i = 0; i < current_lang.keyword_count; i++) {
-                    if (strstr(line, current_lang.keywords[i])) {
-                        parse_lilou_definition(line);
+                    char keyword_with_colon[MAX_TOKEN];
+                    snprintf(keyword_with_colon, sizeof(keyword_with_colon), "%s:", current_lang.keywords[i]);
+                    
+                    if (strstr(line, keyword_with_colon) == line) {
+                        // Mapear palabra clave personalizada a comando interno
+                        char mapped_line[MAX_LINE];
+                        map_custom_keyword_to_internal(line, mapped_line, current_lang.keywords[i]);
+                        parse_lilou_definition(mapped_line);
                         found = 1;
                         break;
                     }

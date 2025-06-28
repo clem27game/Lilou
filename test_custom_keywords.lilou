@@ -1,0 +1,9 @@
+
+Lilou programa - lenguaje de programación : TestPersonnalise
+
+• Nombre del idioma: LangageTest
+• extension: .test
+• operadores: +, -, *, /, ==, !=, <, >, and, or
+• palabras clave: afficher, calculer, var, si, alors, sinon, pour, faire, fonction, appeler
+• mensaje de error: Erreur dans LangageTest
+• prefijo de salida: [TEST] 

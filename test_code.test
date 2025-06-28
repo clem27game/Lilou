@@ -1,0 +1,28 @@
+
+// Test des mots-clés personnalisés en français
+
+var: nom = "Lilou"
+var: version = 3.0
+var: utilisateurs = 1000
+
+afficher: Bienvenue dans {nom} version {version}!
+afficher: Nous avons {utilisateurs} utilisateurs
+
+calculer: version * 10
+
+si: utilisateurs > 500
+alors: afficher: Nous avons beaucoup d'utilisateurs!
+sinon: afficher: Nous avons peu d'utilisateurs
+
+fonction: saluer(personne) {
+    afficher: Bonjour {personne}!
+    afficher: Merci d'utiliser {nom}
+}
+
+appeler: saluer("Développeur")
+
+pour: 3
+faire: afficher: Itération numéro {i}
+
+var: resultat = version + utilisateurs / 100
+afficher: Calcul final: {resultat}
