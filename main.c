@@ -556,9 +556,11 @@ void interpolate_string(char *input, char *output) {
                             snprintf(replacement, MAX_TOKEN, "%.6g", expr_result);
                         }
                     } else {
-                        snprintf(replacement, MAX_TOKEN, "[UNDEF:%s]", var_name);
+                        // Créer automatiquement la variable avec valeur par défaut si elle n'existe pas
+                        set_variable(var_name, 0, "number", NULL);
+                        snprintf(replacement, MAX_TOKEN, "0");
                         if (debug_mode) {
-                            printf("[DEBUG] Variable non définie: %s\n", var_name);
+                            printf("[DEBUG] Variable '%s' créée automatiquement avec valeur 0\n", var_name);
                         }
                     }
                 }
@@ -599,6 +601,12 @@ void map_custom_keyword_to_internal(char *line, char *output, char *custom_keywo
     content++; // Skip the ':'
     trim_whitespace(content);
 
+    // Vérifier d'abord si c'est une définition de variable (contient '=')
+    if (strchr(content, '=')) {
+        snprintf(output, MAX_LINE, "variable: %s", content);
+        return;
+    }
+    
     // Mapear TOUS les mots-clés personnalisés vers des commandes internes appropriées
     // Mots-clés d'affichage
     if (strcmp(custom_keyword, "print") == 0 || 

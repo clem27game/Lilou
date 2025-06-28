@@ -5,9 +5,10 @@ SOURD: Marius est un chien adorable mais il est sourd!
 MAMA: Coucou tout le monde, je suis la mama de Marius
 coucou: Marius dit bonjour avec sa queue qui remue!
 
-// Définition correcte des variables
-croquettes: 10
-poulet: 5
+// Définition correcte des variables avec le bon format
+croquettes: croquettes = 10
+poulet: poulet = 5
+MAMA: MAMA = 3
 
 // Les variables fonctionnent maintenant correctement!
 SOURD: Marius a {croquettes} croquettes dans sa gamelle
@@ -15,21 +16,17 @@ Waouf: Et il a aussi {poulet} morceaux de poulet délicieux!
 
 // Calculs avec variables
 MAMA: Calcul du total de nourriture
-croquettes: {croquettes} + {poulet} = 15 portions
-
-// Variables dynamiques 
-poulet: {croquettes} + {poulet}
-SOURD: Maintenant Marius a {poulet} portions au total!
+poulet: total = {croquettes} + {poulet}
+SOURD: Maintenant Marius a {total} portions au total!
 
 // Test des nouvelles fonctionnalités
 coucou: Age de Marius en années
-MAMA: 3
-croquettes: {MAMA} * 2
-SOURD: Marius a {croquettes} ans en âge humain!
+croquettes: age_humain = {MAMA} * 2
+SOURD: Marius a {age_humain} ans en âge humain!
 
 // Messages avec émotions
-Waouf: Marius est heureux avec {poulet} portions de nourriture
-MAMA: Il remue la queue {croquettes} fois par minute quand il est content
+Waouf: Marius est heureux avec {total} portions de nourriture
+MAMA: Il remue la queue {age_humain} fois par minute quand il est content
 coucou: Même sourd, il apporte tant de joie à la famille!
 
 // Histoire finale
@@ -39,4 +36,4 @@ MAMA: Fin de l'histoire de notre cher Marius ❤️
 
 // Test debug
 Waouf: Variables utilisées dans cette histoire
-coucou: croquettes={croquettes}, poulet={poulet}, total={croquettes}+{poulet}
+coucou: croquettes={croquettes}, poulet={poulet}, total={total}, age_humain={age_humain}
