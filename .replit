@@ -66,3 +66,23 @@ pattern = "**/*.{c,h}"
 
 [languages.c.languageServer]
 start = "ccls"
+
+[workflows]
+runButton = "Compilar y Ejecutar Lilou"
+
+[[workflows.workflow]]
+name = "Compilar y Ejecutar Lilou"
+author = 10543762
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "make -s"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"Lilou compilado exitosamente!\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"Usa: ./main ayuda para ver los comandos disponibles\""
