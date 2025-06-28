@@ -1,0 +1,44 @@
+
+// Ejemplo avanzado de código en SuperLenguaje
+// Demuestra todas las nuevas funcionalidades de Lilou 2.0
+
+mostrar: === SuperLenguaje Demo ===
+
+// Variables
+variable: contador = 0
+variable: limite = 5
+mostrar: Contador inicial: {contador}
+
+// Condicionales
+si: contador < limite
+entonces: mostrar: El contador está dentro del límite
+sino: mostrar: El contador excede el límite
+
+// Bucles
+mostrar: Contando hasta 5:
+repetir: 5
+hacer: mostrar: Número {i}
+
+// Operaciones matemáticas
+variable: resultado = 10 + 5 * 2
+mostrar: Resultado de 10 + 5 * 2 = {resultado}
+
+// Números aleatorios
+mostrar: Número aleatorio entre 1 y 100:
+aleatorio: 1-100
+
+// Funciones
+funcion: despedida { mostrar: ¡Gracias por usar SuperLenguaje! }
+llamar: despedida
+
+// Archivos
+escribir_archivo: saludo.txt, ¡Hola desde SuperLenguaje!
+mostrar: Archivo creado. Leyendo contenido:
+leer_archivo: saludo.txt
+
+// Debug
+debug: on
+debug: variables
+debug: off
+
+mostrar: === Fin del demo ===

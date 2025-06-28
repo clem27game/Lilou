@@ -1,6 +1,31 @@
 
+
+// Ejemplo mejorado con las nuevas funcionalidades de Lilou
 mostrar: ¡Hola desde mi propio lenguaje de programación!
-calcular: 5 + 3 * 2
-mostrar: El resultado de la operación anterior
-calcular: 10 - 4
-mostrar: ¡Mi lenguaje funciona perfectamente!
+
+// Variables
+variable: num1 = 5
+variable: num2 = 3
+variable: resultado = num1 + num2 * 2
+
+mostrar: Calculando {num1} + {num2} * 2
+mostrar: El resultado es: {resultado}
+
+// Condicional
+si: resultado > 10
+entonces: mostrar: ¡El resultado es mayor que 10!
+sino: mostrar: El resultado es menor o igual que 10
+
+// Bucle
+mostrar: Contando hasta 3:
+repetir: 3
+hacer: mostrar: Conteo: {i}
+
+// Función
+funcion: saludo_final { mostrar: ¡Mi lenguaje funciona perfectamente! }
+llamar: saludo_final
+
+// Número aleatorio
+mostrar: Número de la suerte:
+aleatorio: 1-10
+

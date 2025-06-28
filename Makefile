@@ -14,3 +14,23 @@ main-debug: $(SRCS) $(HEADERS)
 
 clean:
 	rm -f main main-debug
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99
+TARGET = main
+DEBUG_TARGET = main-debug
+
+all: $(TARGET)
+
+$(TARGET): main.c
+	$(CC) $(CFLAGS) -O2 -o $(TARGET) main.c
+
+$(DEBUG_TARGET): main.c
+	$(CC) $(CFLAGS) -g -DDEBUG -o $(DEBUG_TARGET) main.c
+
+clean:
+	rm -f $(TARGET) $(DEBUG_TARGET) *.o
+
+install: $(TARGET)
+	cp $(TARGET) /usr/local/bin/lilou
+
+.PHONY: all clean install

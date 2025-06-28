@@ -1,13 +1,15 @@
 
+
 Lilou programa - lenguaje de programación : MiLenguaje
 
-• Nombre del idioma: HolaMundo
-• extension: .hola
-• operadores: +, -, *, /, =, ==, !=
-• palabras clave: mostrar, calcular, si, entonces, fin
-• mensaje de error: ¡Ay no! Algo salió mal
-• prefijo de salida: [HolaMundo] 
+• Nombre del idioma: SuperLenguaje
+• extension: .super
+• operadores: +, -, *, /, %, =, ==, !=, <, >, <=, >=
+• palabras clave: mostrar, calcular, variable, si, entonces, sino, repetir, hacer, aleatorio, funcion, llamar
+• mensaje de error: ¡Oops! Algo salió mal en SuperLenguaje
+• prefijo de salida: [SuperLenguaje] 
 
-// Este es un ejemplo de definición de lenguaje con Lilou
-// El lenguaje se llamará "HolaMundo" y usará la extensión .hola
-// Tendrá operadores matemáticos básicos y palabras clave simples
+// Este es un ejemplo avanzado de definición de lenguaje con Lilou 2.0
+// El lenguaje se llamará "SuperLenguaje" y usará la extensión .super
+// Incluye todas las nuevas funcionalidades: variables, condicionales, bucles, funciones, etc.
+
