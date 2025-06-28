@@ -14,14 +14,15 @@ MAMA: MAMA = 3
 SOURD: Marius a {croquettes} croquettes dans sa gamelle
 Waouf: Et il a aussi {poulet} morceaux de poulet délicieux!
 
-// Calculs avec variables
+// Calculs avec variables - calculs fonctionnels
 MAMA: Calcul du total de nourriture
-poulet: total = {croquettes} + {poulet}
+croquettes: {croquettes} + {poulet} = {croquettes + poulet} portions
+poulet: total = croquettes + poulet
 SOURD: Maintenant Marius a {total} portions au total!
 
 // Test des nouvelles fonctionnalités
-coucou: Age de Marius en années
-croquettes: age_humain = {MAMA} * 2
+coucou: Age de Marius en années 
+croquettes: age_humain = MAMA * 2
 SOURD: Marius a {age_humain} ans en âge humain!
 
 // Messages avec émotions

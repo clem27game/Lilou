@@ -254,15 +254,78 @@ double evaluate_expression(char *expr) {
 
     if (strlen(expr) == 0) return 0;
 
-    // Si c'est juste un nombre
+    // Première étape: résoudre toutes les variables dans l'expression
+    char resolved_expr[MAX_LINE];
+    strcpy(resolved_expr, expr);
+    
+    // Remplacer chaque variable par sa valeur
+    for (int i = 0; i < current_lang.var_count; i++) {
+        char var_pattern[MAX_TOKEN + 2];
+        snprintf(var_pattern, sizeof(var_pattern), "%s", current_lang.variables[i].name);
+        
+        char *pos = strstr(resolved_expr, var_pattern);
+        while (pos != NULL) {
+            // Vérifier que c'est bien une variable isolée (pas partie d'un autre nom)
+            int is_isolated = 1;
+            if (pos > resolved_expr && (isalnum(*(pos-1)) || *(pos-1) == '_')) {
+                is_isolated = 0;
+            }
+            if (*(pos + strlen(var_pattern)) && (isalnum(*(pos + strlen(var_pattern))) || *(pos + strlen(var_pattern)) == '_')) {
+                is_isolated = 0;
+            }
+            
+            if (is_isolated) {
+                char temp_expr[MAX_LINE];
+                int pos_index = pos - resolved_expr;
+                
+                // Copier la partie avant
+                strncpy(temp_expr, resolved_expr, pos_index);
+                temp_expr[pos_index] = '\0';
+                
+                // Ajouter la valeur de la variable
+                char value_str[MAX_TOKEN];
+                if (strcmp(current_lang.variables[i].type, "number") == 0) {
+                    if (current_lang.variables[i].value == (long long)current_lang.variables[i].value) {
+                        snprintf(value_str, sizeof(value_str), "%.0f", current_lang.variables[i].value);
+                    } else {
+                        snprintf(value_str, sizeof(value_str), "%.6g", current_lang.variables[i].value);
+                    }
+                } else {
+                    // Essayer de convertir string en nombre
+                    char *endptr;
+                    double val = strtod(current_lang.variables[i].string_value, &endptr);
+                    if (*endptr == '\0') {
+                        snprintf(value_str, sizeof(value_str), "%.6g", val);
+                    } else {
+                        strcpy(value_str, "0"); // String non numérique = 0
+                    }
+                }
+                strcat(temp_expr, value_str);
+                
+                // Copier la partie après
+                strcat(temp_expr, pos + strlen(var_pattern));
+                
+                strcpy(resolved_expr, temp_expr);
+                pos = strstr(resolved_expr, var_pattern);
+            } else {
+                pos = strstr(pos + 1, var_pattern);
+            }
+        }
+    }
+    
+    if (debug_mode) {
+        printf("[DEBUG] Expression originale: '%s' -> résolue: '%s'\n", expr, resolved_expr);
+    }
+
+    // Si c'est maintenant juste un nombre
     char *endptr;
-    double num_val = strtod(expr, &endptr);
+    double num_val = strtod(resolved_expr, &endptr);
     if (*endptr == '\0') {
         return num_val;
     }
 
-    // Si c'est une variable
-    int var_index = find_variable(expr);
+    // Si c'est encore une variable non résolue
+    int var_index = find_variable(resolved_expr);
     if (var_index >= 0) {
         if (strcmp(current_lang.variables[var_index].type, "number") == 0) {
             return current_lang.variables[var_index].value;
@@ -427,14 +490,27 @@ int evaluate_condition(char *condition) {
             double left_val = evaluate_expression(left);
             double right_val = evaluate_expression(right);
 
-            switch(i) {
-                case 0: return fabs(left_val - right_val) < 1e-10; // ==
-                case 1: return fabs(left_val - right_val) >= 1e-10; // !=
-                case 2: return left_val <= right_val; // <=
-                case 3: return left_val >= right_val; // >=
-                case 4: return left_val < right_val;  // <
-                case 5: return left_val > right_val;  // >
+            if (debug_mode) {
+                printf("[DEBUG] Comparaison: '%s' (%.6g) %s '%s' (%.6g)\n", 
+                       left, left_val, operators[i], right, right_val);
             }
+
+            int result;
+            switch(i) {
+                case 0: result = fabs(left_val - right_val) < 1e-10; break; // ==
+                case 1: result = fabs(left_val - right_val) >= 1e-10; break; // !=
+                case 2: result = left_val <= right_val; break; // <=
+                case 3: result = left_val >= right_val; break; // >=
+                case 4: result = left_val < right_val; break;  // <
+                case 5: result = left_val > right_val; break;  // >
+                default: result = 0;
+            }
+            
+            if (debug_mode) {
+                printf("[DEBUG] Résultat de la comparaison: %d\n", result);
+            }
+            
+            return result;
         }
     }
 
@@ -538,9 +614,11 @@ void interpolate_string(char *input, char *output) {
                         }
                     }
                 } else {
-                    // Vérifier si c'est une expression mathématique simple
-                    char *math_operators = "+-*/";
+                    // Vérifier si c'est une expression mathématique ou contient des variables
+                    char *math_operators = "+-*/%()";
                     int is_math_expr = 0;
+                    
+                    // Vérifier si contient des opérateurs mathématiques
                     for (int i = 0; math_operators[i]; i++) {
                         if (strchr(var_name, math_operators[i])) {
                             is_math_expr = 1;
@@ -548,19 +626,31 @@ void interpolate_string(char *input, char *output) {
                         }
                     }
                     
+                    // Vérifier si contient des noms de variables connues
+                    if (!is_math_expr) {
+                        for (int i = 0; i < current_lang.var_count; i++) {
+                            if (strstr(var_name, current_lang.variables[i].name)) {
+                                is_math_expr = 1;
+                                break;
+                            }
+                        }
+                    }
+                    
                     if (is_math_expr || isdigit(var_name[0]) || (var_name[0] == '-' && isdigit(var_name[1]))) {
                         double expr_result = evaluate_expression(var_name);
+                        if (debug_mode) {
+                            printf("[DEBUG] Expression '{%s}' évaluée à %.6g\n", var_name, expr_result);
+                        }
                         if (expr_result == (long long)expr_result && expr_result > -1000000 && expr_result < 1000000) {
                             snprintf(replacement, MAX_TOKEN, "%.0f", expr_result);
                         } else {
                             snprintf(replacement, MAX_TOKEN, "%.6g", expr_result);
                         }
                     } else {
-                        // Créer automatiquement la variable avec valeur par défaut si elle n'existe pas
-                        set_variable(var_name, 0, "number", NULL);
-                        snprintf(replacement, MAX_TOKEN, "0");
+                        // Variable non définie, retourner le nom avec [UNDEF:]
+                        snprintf(replacement, MAX_TOKEN, "[UNDEF:%s]", var_name);
                         if (debug_mode) {
-                            printf("[DEBUG] Variable '%s' créée automatiquement avec valeur 0\n", var_name);
+                            printf("[DEBUG] Variable '%s' non définie\n", var_name);
                         }
                     }
                 }
