@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
+#include <unistd.h>
+#include <strings.h>
 
 #define MAX_LINE 2048
 #define MAX_TOKEN 512
@@ -74,6 +76,9 @@ typedef struct {
 Language current_lang;
 int debug_mode = 0;
 char current_function_scope[MAX_TOKEN] = "";
+
+// Déclaration de fonction
+void parse_lilou_definition(char *line);
 
 void init_language() {
     memset(&current_lang, 0, sizeof(Language));
@@ -493,8 +498,6 @@ void interpolate_string(char *input, char *output) {
         }
     }
 }
-
-void parse_lilou_definition(char *line);
 
 void map_custom_keyword_to_internal(char *line, char *output, char *custom_keyword) {
     if (!line || !output || !custom_keyword) return;
@@ -1323,7 +1326,7 @@ void test_lilou_file(char *filename) {
     // Mostrar funciones matemáticas
     printf("\n📊 Funciones matemáticas disponibles:\n");
     printf("   sin, cos, tan, sqrt, abs, floor, ceil, round, log, exp\n");
-    printf("   Operadores: +, -, *, /, %, ** (potencia)\n");
+    printf("   Operadores: +, -, *, /, %%, ** (potencia)\n");
     printf("   Comparación: ==, !=, <, >, <=, >=\n");
     printf("   Lógicos: and/y, or/o\n");
 
@@ -1421,8 +1424,8 @@ void show_examples() {
     printf("    variable: resultado = a + b\n");
     printf("    mostrar: {a} + {b} = {resultado}\n");
     printf("    retornar: resultado\n");
-    printf("}\n");```text
-llamar: suma(5, 3)\n\n");
+    printf("}\n");
+    printf("llamar: suma(5, 3)\n\n");
 
     printf("📥 8. ENTRADA INTERACTIVA:\n");
     printf("entrada: Ingresa tu edad: \n");
@@ -1482,7 +1485,7 @@ void show_features() {
     printf("  • Interpolación de variables en strings\n\n");
 
     printf("🧮 OPERACIONES MATEMÁTICAS:\n");
-    printf("  • Operadores básicos: +, -, *, /, %\n");
+    printf("  • Operadores básicos: +, -, *, /, %%\n");
     printf("  • Potencias: **\n");
     printf("  • Funciones trigonométricas: sin, cos, tan\n");
     printf("  • Funciones de redondeo: floor, ceil, round\n");
