@@ -1,6 +1,10 @@
 
+**🌸🩷 Lilou - langage de programmation écrit en espagnol pour crée facilement des mini-langages de programmation personnalisés ! ❤️**
 
 # 🌟 LILOU 2.0 - Meta-lenguaje de Programación Avanzado
+
+![Lilou](http://www.image-heberg.fr/files/17511224924163408394.png)
+
 
 ¡Bienvenido a **Lilou 2.0**! Un meta-lenguaje de programación revolucionario que te permite crear tus propios lenguajes de programación completos con funcionalidades avanzadas, ¡todo en español!
 
@@ -58,7 +62,7 @@ Lilou programa - lenguaje de programación : MiLenguaje
 ### 2. Probar tu Definición
 
 ```bash
-./main tester-lilou mi_lenguaje.lilou
+./Lilou/main tester-lilou mi_lenguaje.lilou
 ```
 
 ### 3. Escribir Código en tu Lenguaje
@@ -90,7 +94,7 @@ llamar: despedida
 ### 4. Ejecutar tu Código
 
 ```bash
-./main lilou mi_lenguaje.lilou codigo.super
+./Lilou/main lilou mi_lenguaje.lilou codigo.super
 ```
 
 ## 📖 Sintaxis de Definición
