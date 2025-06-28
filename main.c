@@ -243,6 +243,12 @@ double evaluate_expression(char *expr) {
         return atof(expr);
     }
 
+    // Si es una variable AVANT les fonctions mathématiques
+    int var_index = find_variable(expr);
+    if (var_index >= 0) {
+        return get_variable_value(expr);
+    }
+
     // Funciones matemáticas
     if (strchr(expr, '(') && strchr(expr, ')')) {
         char func_name[MAX_TOKEN];
@@ -262,11 +268,6 @@ double evaluate_expression(char *expr) {
             double arg = evaluate_expression(arg_str);
             return evaluate_math_function(func_name, arg);
         }
-    }
-
-    // Si es una variable
-    if (find_variable(expr) >= 0) {
-        return get_variable_value(expr);
     }
 
     // Evaluación de expresiones complejas con precedencia de operadores
@@ -311,6 +312,10 @@ double evaluate_expression(char *expr) {
 int evaluate_condition(char *condition) {
     if (!condition) return 0;
     trim_whitespace(condition);
+    
+    if (debug_mode) {
+        printf("[DEBUG] Évaluation condition: '%s'\n", condition);
+    }
 
     // Operadores lógicos
     if (strstr(condition, " and ") || strstr(condition, " y ")) {
@@ -323,7 +328,15 @@ int evaluate_condition(char *condition) {
 
         strcpy(right, and_pos + (strstr(condition, " and ") ? 5 : 3));
 
-        return evaluate_condition(left) && evaluate_condition(right);
+        int left_result = evaluate_condition(left);
+        int right_result = evaluate_condition(right);
+        int final_result = left_result && right_result;
+        
+        if (debug_mode) {
+            printf("[DEBUG] '%s' = %d AND '%s' = %d => %d\n", left, left_result, right, right_result, final_result);
+        }
+        
+        return final_result;
     }
 
     if (strstr(condition, " or ") || strstr(condition, " o ")) {
@@ -380,6 +393,9 @@ void execute_function(char *func_name, char *params) {
         return;
     }
 
+    // Nettoyer le nom de la fonction
+    trim_whitespace(func_name);
+
     for (int i = 0; i < current_lang.func_count; i++) {
         if (strcmp(current_lang.functions[i].name, func_name) == 0) {
             current_lang.current_recursion_depth++;
@@ -396,13 +412,20 @@ void execute_function(char *func_name, char *params) {
 
             // Procesar parámetros si existen
             if (params && strlen(params) > 0) {
-                char *param_token = strtok(params, ",");
+                char params_copy[MAX_LINE];
+                strcpy(params_copy, params);
+                char *param_token = strtok(params_copy, ",");
                 int param_index = 0;
 
                 while (param_token && param_index < current_lang.functions[i].param_count) {
                     trim_whitespace(param_token);
                     double param_value = evaluate_expression(param_token);
                     set_variable(current_lang.functions[i].params[param_index], param_value, "number", NULL);
+                    
+                    if (debug_mode) {
+                        printf("[DEBUG] Paramètre '%s' = %.6g\n", current_lang.functions[i].params[param_index], param_value);
+                    }
+                    
                     param_index++;
                     param_token = strtok(NULL, ",");
                 }
@@ -424,7 +447,7 @@ void execute_function(char *func_name, char *params) {
             return;
         }
     }
-    printf("%s: función '%s'\n", current_lang.error_messages[4], func_name);
+    printf("Error: función no definida: función '%s'\n", func_name);
 }
 
 void interpolate_string(char *input, char *output) {
@@ -742,7 +765,7 @@ void parse_lilou_definition(char *line) {
         double result = evaluate_expression(calc_start);
         printf("%s%.6g\n", current_lang.output_prefix, result);
     }
-    else if (strstr(line, "variable:")) {
+    else if (strstr(line, "variable:") || strstr(line, "var:")) {
         char *var_start = strchr(line, ':') + 1;
         trim_whitespace(var_start);
 
@@ -769,6 +792,10 @@ void parse_lilou_definition(char *line) {
                 double value = evaluate_expression(value_str);
                 set_variable(var_name, value, "number", NULL);
                 printf("%sVariable '%s' = %.6g\n", current_lang.output_prefix, var_name, value);
+                
+                if (debug_mode) {
+                    printf("[DEBUG] Variable '%s' définie avec valeur: %.6g\n", var_name, value);
+                }
             }
         }
     }
@@ -1171,6 +1198,9 @@ void parse_lilou_definition(char *line) {
 }
 
 void execute_custom_language(char *lilou_file, char *code_file) {
+    // Réinitialiser complètement le langage
+    init_language();
+    
     FILE *def_file = fopen(lilou_file, "r");
     if (!def_file) {
         printf("Error: No se puede abrir el archivo de definición %s\n", lilou_file);

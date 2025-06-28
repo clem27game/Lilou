@@ -1,0 +1,22 @@
+
+// Histoire de Marius le chien sourd
+
+SOURD: Marius est un chien adorable mais il est sourd!
+MAMA: Coucou tout le monde, je suis la mama de Marius
+coucou: Marius dit bonjour avec sa queue qui remue!
+
+croquettes: 10
+poulet: 5
+
+SOURD: Marius a {croquettes} croquettes dans sa gamelle
+Waouf: Et il a aussi {poulet} morceaux de poulet délicieux!
+
+MAMA: Marius ne peut pas entendre quand je l'appelle
+coucou: Mais il comprend avec les gestes et l'amour!
+
+SOURD: Total de nourriture pour Marius
+croquettes: {croquettes} + {poulet}
+
+Waouf: Marius est le plus mignon des chiens!
+MAMA: Même sourd, il apporte tant de joie!
+poulet: Fin de l'histoire de Marius le chien ❤️
