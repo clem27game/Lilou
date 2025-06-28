@@ -145,19 +145,35 @@ int find_array(char *name) {
 void set_variable(char *name, double value, char *type, char *string_value) {
     if (!name || !type) return;
 
-    int index = find_variable(name);
+    // Nettoyer le nom de la variable
+    char clean_name[MAX_TOKEN];
+    strncpy(clean_name, name, MAX_TOKEN - 1);
+    clean_name[MAX_TOKEN - 1] = '\0';
+    trim_whitespace(clean_name);
+
+    if (strlen(clean_name) == 0) {
+        if (debug_mode) printf("[DEBUG] Nom de variable vide ignoré\n");
+        return;
+    }
+
+    int index = find_variable(clean_name);
     if (index >= 0) {
         // Mettre à jour variable existante
         current_lang.variables[index].value = value;
-        strcpy(current_lang.variables[index].type, type);
-        if (string_value && strlen(string_value) < MAX_LINE) {
-            strcpy(current_lang.variables[index].string_value, string_value);
-        } else if (strcmp(type, "string") == 0 && !string_value) {
-            strcpy(current_lang.variables[index].string_value, "");
+        strncpy(current_lang.variables[index].type, type, 19);
+        current_lang.variables[index].type[19] = '\0';
+        
+        if (strcmp(type, "string") == 0) {
+            if (string_value && strlen(string_value) < MAX_LINE) {
+                strncpy(current_lang.variables[index].string_value, string_value, MAX_LINE - 1);
+                current_lang.variables[index].string_value[MAX_LINE - 1] = '\0';
+            } else {
+                strcpy(current_lang.variables[index].string_value, "");
+            }
         }
 
         if (debug_mode) {
-            printf("[DEBUG] Variable '%s' mise à jour: %s = ", name, type);
+            printf("[DEBUG] Variable '%s' mise à jour: %s = ", clean_name, type);
             if (strcmp(type, "string") == 0) {
                 printf("\"%s\"\n", current_lang.variables[index].string_value);
             } else {
@@ -166,17 +182,15 @@ void set_variable(char *name, double value, char *type, char *string_value) {
         }
     } else if (current_lang.var_count < MAX_VARIABLES) {
         // Créer nouvelle variable
-        if (strlen(name) >= MAX_TOKEN) {
-            printf("[ERREUR] Nom de variable trop long: %s\n", name);
-            return;
-        }
-
-        strcpy(current_lang.variables[current_lang.var_count].name, name);
+        strncpy(current_lang.variables[current_lang.var_count].name, clean_name, MAX_TOKEN - 1);
+        current_lang.variables[current_lang.var_count].name[MAX_TOKEN - 1] = '\0';
         current_lang.variables[current_lang.var_count].value = value;
-        strcpy(current_lang.variables[current_lang.var_count].type, type);
+        strncpy(current_lang.variables[current_lang.var_count].type, type, 19);
+        current_lang.variables[current_lang.var_count].type[19] = '\0';
 
-        if (string_value && strlen(string_value) < MAX_LINE) {
-            strcpy(current_lang.variables[current_lang.var_count].string_value, string_value);
+        if (strcmp(type, "string") == 0 && string_value && strlen(string_value) < MAX_LINE) {
+            strncpy(current_lang.variables[current_lang.var_count].string_value, string_value, MAX_LINE - 1);
+            current_lang.variables[current_lang.var_count].string_value[MAX_LINE - 1] = '\0';
         } else {
             strcpy(current_lang.variables[current_lang.var_count].string_value, "");
         }
@@ -184,7 +198,7 @@ void set_variable(char *name, double value, char *type, char *string_value) {
         current_lang.var_count++;
 
         if (debug_mode) {
-            printf("[DEBUG] Variable '%s' créée: %s = ", name, type);
+            printf("[DEBUG] Variable '%s' créée: %s = ", clean_name, type);
             if (strcmp(type, "string") == 0) {
                 printf("\"%s\"\n", string_value ? string_value : "");
             } else {
@@ -238,18 +252,31 @@ double evaluate_expression(char *expr) {
     if (!expr) return 0;
     trim_whitespace(expr);
 
-    // Si es solo un número
-    if (isdigit(expr[0]) || (expr[0] == '-' && isdigit(expr[1])) || expr[0] == '.') {
-        return atof(expr);
+    if (strlen(expr) == 0) return 0;
+
+    // Si c'est juste un nombre
+    char *endptr;
+    double num_val = strtod(expr, &endptr);
+    if (*endptr == '\0') {
+        return num_val;
     }
 
-    // Si es una variable AVANT les fonctions mathématiques
+    // Si c'est une variable
     int var_index = find_variable(expr);
     if (var_index >= 0) {
-        return get_variable_value(expr);
+        if (strcmp(current_lang.variables[var_index].type, "number") == 0) {
+            return current_lang.variables[var_index].value;
+        } else {
+            // Tenter de convertir string en nombre
+            double val = strtod(current_lang.variables[var_index].string_value, &endptr);
+            if (*endptr == '\0') {
+                return val;
+            }
+            return 0; // String non numérique
+        }
     }
 
-    // Funciones matemáticas
+    // Fonctions mathématiques
     if (strchr(expr, '(') && strchr(expr, ')')) {
         char func_name[MAX_TOKEN];
         char *paren_start = strchr(expr, '(');
@@ -257,20 +284,32 @@ double evaluate_expression(char *expr) {
 
         if (paren_start && paren_end && paren_end > paren_start) {
             int func_len = paren_start - expr;
-            strncpy(func_name, expr, func_len);
-            func_name[func_len] = '\0';
+            if (func_len > 0 && func_len < MAX_TOKEN) {
+                strncpy(func_name, expr, func_len);
+                func_name[func_len] = '\0';
+                trim_whitespace(func_name);
 
-            char arg_str[MAX_TOKEN];
-            int arg_len = paren_end - paren_start - 1;
-            strncpy(arg_str, paren_start + 1, arg_len);
-            arg_str[arg_len] = '\0';
+                char arg_str[MAX_TOKEN];
+                int arg_len = paren_end - paren_start - 1;
+                if (arg_len > 0 && arg_len < MAX_TOKEN) {
+                    strncpy(arg_str, paren_start + 1, arg_len);
+                    arg_str[arg_len] = '\0';
 
-            double arg = evaluate_expression(arg_str);
-            return evaluate_math_function(func_name, arg);
+                    double arg = evaluate_expression(arg_str);
+                    return evaluate_math_function(func_name, arg);
+                }
+            }
         }
     }
 
-    // Evaluación de expresiones complejas con precedencia de operadores
+    // Évaluation des expressions complexes avec parenthèses
+    char *open_paren = strchr(expr, '(');
+    if (open_paren && !strchr(expr, ')')) {
+        // Parenthèse non fermée
+        return 0;
+    }
+
+    // Opérateurs avec précédence
     char *operators[] = {"**", "*", "/", "%", "+", "-"};
     int precedence[] = {3, 2, 2, 2, 1, 1};
     int op_count = 6;
@@ -280,32 +319,48 @@ double evaluate_expression(char *expr) {
             if (precedence[i] == prec) {
                 char *op_pos = strstr(expr, operators[i]);
                 if (op_pos && op_pos != expr) {
+                    // Vérifier qu'on n'est pas dans une fonction
+                    char *func_paren = strchr(expr, '(');
+                    if (func_paren && op_pos > func_paren) {
+                        char *close_paren = strchr(func_paren, ')');
+                        if (close_paren && op_pos < close_paren) {
+                            continue; // Opérateur dans une fonction, ignorer
+                        }
+                    }
+
                     char left[MAX_TOKEN], right[MAX_TOKEN];
-
                     int left_len = op_pos - expr;
-                    strncpy(left, expr, left_len);
-                    left[left_len] = '\0';
-                    trim_whitespace(left);
+                    if (left_len > 0 && left_len < MAX_TOKEN) {
+                        strncpy(left, expr, left_len);
+                        left[left_len] = '\0';
+                        trim_whitespace(left);
 
-                    strcpy(right, op_pos + strlen(operators[i]));
-                    trim_whitespace(right);
+                        strncpy(right, op_pos + strlen(operators[i]), MAX_TOKEN - 1);
+                        right[MAX_TOKEN - 1] = '\0';
+                        trim_whitespace(right);
 
-                    double left_val = evaluate_expression(left);
-                    double right_val = evaluate_expression(right);
+                        if (strlen(left) > 0 && strlen(right) > 0) {
+                            double left_val = evaluate_expression(left);
+                            double right_val = evaluate_expression(right);
 
-                    switch(i) {
-                        case 0: return pow(left_val, right_val); // **
-                        case 1: return left_val * right_val;     // *
-                        case 2: return safe_division(left_val, right_val); // /
-                        case 3: return right_val != 0 ? fmod(left_val, right_val) : 0; // %
-                        case 4: return left_val + right_val;     // +
-                        case 5: return left_val - right_val;     // -
+                            switch(i) {
+                                case 0: return pow(left_val, right_val);
+                                case 1: return left_val * right_val;
+                                case 2: return safe_division(left_val, right_val);
+                                case 3: return fabs(right_val) > 1e-10 ? fmod(left_val, right_val) : 0;
+                                case 4: return left_val + right_val;
+                                case 5: return left_val - right_val;
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
+    if (debug_mode) {
+        printf("[DEBUG] Expression non évaluable: '%s'\n", expr);
+    }
     return 0;
 }
 
@@ -461,60 +516,71 @@ void interpolate_string(char *input, char *output) {
         if (end != NULL) {
             char var_name[MAX_TOKEN];
             int var_len = end - start - 1;
-            strncpy(var_name, start + 1, var_len);
-            var_name[var_len] = '\0';
-            trim_whitespace(var_name);
+            if (var_len > 0 && var_len < MAX_TOKEN) {
+                strncpy(var_name, start + 1, var_len);
+                var_name[var_len] = '\0';
+                trim_whitespace(var_name);
 
-            int var_index = find_variable(var_name);
-            char replacement[MAX_TOKEN];
+                int var_index = find_variable(var_name);
+                char replacement[MAX_TOKEN];
+                replacement[0] = '\0';
 
-            if (var_index >= 0) {
-                if (strcmp(current_lang.variables[var_index].type, "string") == 0) {
-                    strcpy(replacement, current_lang.variables[var_index].string_value);
-                } else {
-                    // Améliorer le formatage des nombres
-                    double val = current_lang.variables[var_index].value;
-                    if (val == (long long)val) {
-                        sprintf(replacement, "%.0f", val);
+                if (var_index >= 0) {
+                    if (strcmp(current_lang.variables[var_index].type, "string") == 0) {
+                        strncpy(replacement, current_lang.variables[var_index].string_value, MAX_TOKEN - 1);
+                        replacement[MAX_TOKEN - 1] = '\0';
                     } else {
-                        sprintf(replacement, "%.6g", val);
+                        double val = current_lang.variables[var_index].value;
+                        if (val == (long long)val && val > -1000000 && val < 1000000) {
+                            snprintf(replacement, MAX_TOKEN, "%.0f", val);
+                        } else {
+                            snprintf(replacement, MAX_TOKEN, "%.6g", val);
+                        }
+                    }
+                } else {
+                    // Vérifier si c'est une expression mathématique simple
+                    char *math_operators = "+-*/";
+                    int is_math_expr = 0;
+                    for (int i = 0; math_operators[i]; i++) {
+                        if (strchr(var_name, math_operators[i])) {
+                            is_math_expr = 1;
+                            break;
+                        }
+                    }
+                    
+                    if (is_math_expr || isdigit(var_name[0]) || (var_name[0] == '-' && isdigit(var_name[1]))) {
+                        double expr_result = evaluate_expression(var_name);
+                        if (expr_result == (long long)expr_result && expr_result > -1000000 && expr_result < 1000000) {
+                            snprintf(replacement, MAX_TOKEN, "%.0f", expr_result);
+                        } else {
+                            snprintf(replacement, MAX_TOKEN, "%.6g", expr_result);
+                        }
+                    } else {
+                        snprintf(replacement, MAX_TOKEN, "[UNDEF:%s]", var_name);
+                        if (debug_mode) {
+                            printf("[DEBUG] Variable non définie: %s\n", var_name);
+                        }
                     }
                 }
-            } else {
-                // Vérifier si c'est une expression mathématique
-                double expr_result = evaluate_expression(var_name);
-                if (find_variable(var_name) == -1 && (isdigit(var_name[0]) || strchr(var_name, '+') || strchr(var_name, '-') || strchr(var_name, '*') || strchr(var_name, '/'))) {
-                    if (expr_result == (long long)expr_result) {
-                        sprintf(replacement, "%.0f", expr_result);
-                    } else {
-                        sprintf(replacement, "%.6g", expr_result);
-                    }
+
+                // Remplacement sécurisé
+                int replacement_len = strlen(replacement);
+                int var_placeholder_len = end - start + 1;
+                int remaining_len = strlen(end + 1);
+                int total_len = strlen(output) - var_placeholder_len + replacement_len;
+
+                if (total_len < MAX_LINE - 1) {
+                    memmove(start + replacement_len, end + 1, remaining_len + 1);
+                    memcpy(start, replacement, replacement_len);
+                    start = strchr(start + replacement_len, '{');
                 } else {
-                    sprintf(replacement, "[UNDEF:%s]", var_name);
                     if (debug_mode) {
-                        printf("[DEBUG] Variable non définie: %s\n", var_name);
+                        printf("[DEBUG] Dépassement de buffer évité\n");
                     }
+                    break;
                 }
-            }
-
-            // Calculer les tailles pour éviter les dépassements de buffer
-            int replacement_len = strlen(replacement);
-            int var_placeholder_len = end - start + 1; // +1 pour inclure '}'
-            int remaining_len = strlen(end + 1);
-
-            // Vérifier que le buffer de sortie est assez grand
-            if (strlen(output) - var_placeholder_len + replacement_len < MAX_LINE - 1) {
-                // Déplacer le reste du string
-                memmove(start + replacement_len, end + 1, remaining_len + 1);
-                // Copier le remplacement
-                memcpy(start, replacement, replacement_len);
-
-                start = strchr(start + replacement_len, '{');
             } else {
-                if (debug_mode) {
-                    printf("[DEBUG] Buffer overflow évité lors de l'interpolation\n");
-                }
-                break;
+                start = strchr(start + 1, '{');
             }
         } else {
             break;
@@ -773,30 +839,75 @@ void parse_lilou_definition(char *line) {
         if (equal_pos) {
             char var_name[MAX_TOKEN];
             int name_len = equal_pos - var_start;
-            strncpy(var_name, var_start, name_len);
-            var_name[name_len] = '\0';
-            trim_whitespace(var_name);
+            if (name_len > 0 && name_len < MAX_TOKEN) {
+                strncpy(var_name, var_start, name_len);
+                var_name[name_len] = '\0';
+                trim_whitespace(var_name);
 
-            char *value_str = equal_pos + 1;
-            trim_whitespace(value_str);
+                char *value_str = equal_pos + 1;
+                trim_whitespace(value_str);
 
-            // Detectar si es string (entre comillas)
-            if ((value_str[0] == '"' && value_str[strlen(value_str)-1] == '"') ||
-                (value_str[0] == '\'' && value_str[strlen(value_str)-1] == '\'')) {
-                char string_val[MAX_LINE];
-                strncpy(string_val, value_str + 1, strlen(value_str) - 2);
-                string_val[strlen(value_str) - 2] = '\0';
-                set_variable(var_name, 0, "string", string_val);
-                printf("%sVariable '%s' = \"%s\"\n", current_lang.output_prefix, var_name, string_val);
-            } else {
-                double value = evaluate_expression(value_str);
-                set_variable(var_name, value, "number", NULL);
-                printf("%sVariable '%s' = %.6g\n", current_lang.output_prefix, var_name, value);
-                
-                if (debug_mode) {
-                    printf("[DEBUG] Variable '%s' définie avec valeur: %.6g\n", var_name, value);
+                if (strlen(var_name) > 0 && strlen(value_str) > 0) {
+                    // Detectar si es string (entre comillas)
+                    if ((value_str[0] == '"' && value_str[strlen(value_str)-1] == '"') ||
+                        (value_str[0] == '\'' && value_str[strlen(value_str)-1] == '\'')) {
+                        char string_val[MAX_LINE];
+                        int str_len = strlen(value_str) - 2;
+                        if (str_len > 0 && str_len < MAX_LINE) {
+                            strncpy(string_val, value_str + 1, str_len);
+                            string_val[str_len] = '\0';
+                            set_variable(var_name, 0, "string", string_val);
+                            if (!debug_mode) {
+                                printf("%sVariable '%s' = \"%s\"\n", current_lang.output_prefix, var_name, string_val);
+                            }
+                        }
+                    } else {
+                        double value = evaluate_expression(value_str);
+                        set_variable(var_name, value, "number", NULL);
+                        if (!debug_mode) {
+                            printf("%sVariable '%s' = %.6g\n", current_lang.output_prefix, var_name, value);
+                        }
+                    }
                 }
             }
+        } else {
+            // Variable sans valeur, initialiser à 0
+            set_variable(var_start, 0, "number", NULL);
+            if (!debug_mode) {
+                printf("%sVariable '%s' = 0\n", current_lang.output_prefix, var_start);
+            }
+        }
+    }
+    // Nouvelle fonctionnalité: opérations sur variables existantes
+    else if (strstr(line, "incrementer:")) {
+        char *var_start = strchr(line, ':') + 1;
+        trim_whitespace(var_start);
+        int var_index = find_variable(var_start);
+        if (var_index >= 0) {
+            current_lang.variables[var_index].value += 1;
+            printf("%s'%s' incrémenté à %.6g\n", current_lang.output_prefix, var_start, current_lang.variables[var_index].value);
+        }
+    }
+    else if (strstr(line, "decrementer:")) {
+        char *var_start = strchr(line, ':') + 1;
+        trim_whitespace(var_start);
+        int var_index = find_variable(var_start);
+        if (var_index >= 0) {
+            current_lang.variables[var_index].value -= 1;
+            printf("%s'%s' décrémenté à %.6g\n", current_lang.output_prefix, var_start, current_lang.variables[var_index].value);
+        }
+    }
+    // Nouvelle fonctionnalité: gestion des constantes
+    else if (strstr(line, "constante:")) {
+        char *const_start = strchr(line, ':') + 1;
+        trim_whitespace(const_start);
+        
+        if (strstr(const_start, "pi")) {
+            set_variable("pi", 3.14159265359, "number", NULL);
+            printf("%sConstante 'pi' = 3.14159\n", current_lang.output_prefix);
+        } else if (strstr(const_start, "e")) {
+            set_variable("e", 2.71828182846, "number", NULL);
+            printf("%sConstante 'e' = 2.71828\n", current_lang.output_prefix);
         }
     }
     else if (strstr(line, "array:")) {
@@ -887,8 +998,14 @@ void parse_lilou_definition(char *line) {
         trim_whitespace(do_start);
 
         while (current_lang.loop_count < current_lang.loop_max && !current_lang.break_flag) {
+            // Mettre à jour les variables de boucle
             set_variable("i", current_lang.loop_count, "number", NULL);
+            set_variable("iteration", current_lang.loop_count + 1, "number", NULL);
             current_lang.continue_flag = 0;
+
+            if (debug_mode) {
+                printf("[DEBUG] Boucle iteration %d/%d\n", current_lang.loop_count + 1, current_lang.loop_max);
+            }
 
             parse_lilou_definition(do_start);
 
@@ -896,11 +1013,31 @@ void parse_lilou_definition(char *line) {
                 current_lang.loop_count++;
                 continue;
             }
+            if (current_lang.break_flag) {
+                break;
+            }
 
             current_lang.loop_count++;
         }
         current_lang.loop_active = 0;
         current_lang.break_flag = 0;
+        current_lang.continue_flag = 0;
+    }
+    // Nouvelle fonctionnalité: boucle pour arrays
+    else if (strstr(line, "para_cada:")) {
+        char *array_start = strchr(line, ':') + 1;
+        trim_whitespace(array_start);
+        
+        int array_index = find_array(array_start);
+        if (array_index >= 0) {
+            printf("%sItération sur array '%s' (%d éléments)\n", current_lang.output_prefix, array_start, current_lang.arrays[array_index].size);
+            for (int i = 0; i < current_lang.arrays[array_index].size && !current_lang.break_flag; i++) {
+                set_variable("elemento", current_lang.arrays[array_index].values[i], "number", NULL);
+                set_variable("indice", i, "number", NULL);
+                printf("%sÉlément[%d] = %.6g\n", current_lang.output_prefix, i, current_lang.arrays[array_index].values[i]);
+            }
+            current_lang.break_flag = 0;
+        }
     }
     else if (strstr(line, "aleatorio:")) {
         char *range_start = strchr(line, ':') + 1;
