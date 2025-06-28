@@ -254,18 +254,59 @@ double evaluate_expression(char *expr) {
 
     if (strlen(expr) == 0) return 0;
 
-    // Première étape: résoudre toutes les variables dans l'expression
+    // Vérifier d'abord si c'est un simple nombre
+    char *endptr;
+    double num_val = strtod(expr, &endptr);
+    if (*endptr == '\0') {
+        return num_val;
+    }
+
+    // Vérifier si c'est une simple variable
+    int var_index = find_variable(expr);
+    if (var_index >= 0) {
+        if (strcmp(current_lang.variables[var_index].type, "number") == 0) {
+            return current_lang.variables[var_index].value;
+        } else {
+            // Tenter de convertir string en nombre
+            double val = strtod(current_lang.variables[var_index].string_value, &endptr);
+            if (*endptr == '\0') {
+                return val;
+            }
+            return 0; // String non numérique
+        }
+    }
+
+    // Résoudre les variables dans l'expression complexe
     char resolved_expr[MAX_LINE];
     strcpy(resolved_expr, expr);
     
-    // Remplacer chaque variable par sa valeur
+    // Trier les variables par longueur décroissante pour éviter les remplacements partiels
+    int var_indices[MAX_VARIABLES];
     for (int i = 0; i < current_lang.var_count; i++) {
+        var_indices[i] = i;
+    }
+    
+    // Tri simple par longueur de nom (plus long en premier)
+    for (int i = 0; i < current_lang.var_count - 1; i++) {
+        for (int j = i + 1; j < current_lang.var_count; j++) {
+            if (strlen(current_lang.variables[var_indices[i]].name) < 
+                strlen(current_lang.variables[var_indices[j]].name)) {
+                int temp = var_indices[i];
+                var_indices[i] = var_indices[j];
+                var_indices[j] = temp;
+            }
+        }
+    }
+    
+    // Remplacer chaque variable par sa valeur (ordre décroissant de longueur)
+    for (int idx = 0; idx < current_lang.var_count; idx++) {
+        int i = var_indices[idx];
         char var_pattern[MAX_TOKEN + 2];
         snprintf(var_pattern, sizeof(var_pattern), "%s", current_lang.variables[i].name);
         
         char *pos = strstr(resolved_expr, var_pattern);
         while (pos != NULL) {
-            // Vérifier que c'est bien une variable isolée (pas partie d'un autre nom)
+            // Vérifier que c'est bien une variable isolée
             int is_isolated = 1;
             if (pos > resolved_expr && (isalnum(*(pos-1)) || *(pos-1) == '_')) {
                 is_isolated = 0;
@@ -285,16 +326,12 @@ double evaluate_expression(char *expr) {
                 // Ajouter la valeur de la variable
                 char value_str[MAX_TOKEN];
                 if (strcmp(current_lang.variables[i].type, "number") == 0) {
-                    if (current_lang.variables[i].value == (long long)current_lang.variables[i].value) {
-                        snprintf(value_str, sizeof(value_str), "%.0f", current_lang.variables[i].value);
-                    } else {
-                        snprintf(value_str, sizeof(value_str), "%.6g", current_lang.variables[i].value);
-                    }
+                    snprintf(value_str, sizeof(value_str), "%.6g", current_lang.variables[i].value);
                 } else {
                     // Essayer de convertir string en nombre
-                    char *endptr;
-                    double val = strtod(current_lang.variables[i].string_value, &endptr);
-                    if (*endptr == '\0') {
+                    char *str_endptr;
+                    double val = strtod(current_lang.variables[i].string_value, &str_endptr);
+                    if (*str_endptr == '\0') {
                         snprintf(value_str, sizeof(value_str), "%.6g", val);
                     } else {
                         strcpy(value_str, "0"); // String non numérique = 0
@@ -317,26 +354,10 @@ double evaluate_expression(char *expr) {
         printf("[DEBUG] Expression originale: '%s' -> résolue: '%s'\n", expr, resolved_expr);
     }
 
-    // Si c'est maintenant juste un nombre
-    char *endptr;
-    double num_val = strtod(resolved_expr, &endptr);
+    // Réessayer d'évaluer comme nombre simple
+    num_val = strtod(resolved_expr, &endptr);
     if (*endptr == '\0') {
         return num_val;
-    }
-
-    // Si c'est encore une variable non résolue
-    int var_index = find_variable(resolved_expr);
-    if (var_index >= 0) {
-        if (strcmp(current_lang.variables[var_index].type, "number") == 0) {
-            return current_lang.variables[var_index].value;
-        } else {
-            // Tenter de convertir string en nombre
-            double val = strtod(current_lang.variables[var_index].string_value, &endptr);
-            if (*endptr == '\0') {
-                return val;
-            }
-            return 0; // String non numérique
-        }
     }
 
     // Fonctions mathématiques
@@ -636,7 +657,12 @@ void interpolate_string(char *input, char *output) {
                         }
                     }
                     
-                    if (is_math_expr || isdigit(var_name[0]) || (var_name[0] == '-' && isdigit(var_name[1]))) {
+                    // Vérifier si c'est un nombre simple
+                    if (!is_math_expr && (isdigit(var_name[0]) || (var_name[0] == '-' && isdigit(var_name[1])))) {
+                        is_math_expr = 1;
+                    }
+                    
+                    if (is_math_expr) {
                         double expr_result = evaluate_expression(var_name);
                         if (debug_mode) {
                             printf("[DEBUG] Expression '{%s}' évaluée à %.6g\n", var_name, expr_result);
@@ -647,10 +673,11 @@ void interpolate_string(char *input, char *output) {
                             snprintf(replacement, MAX_TOKEN, "%.6g", expr_result);
                         }
                     } else {
-                        // Variable non définie, retourner le nom avec [UNDEF:]
-                        snprintf(replacement, MAX_TOKEN, "[UNDEF:%s]", var_name);
+                        // Variable non définie, créer automatiquement avec valeur 0
+                        set_variable(var_name, 0, "number", NULL);
+                        snprintf(replacement, MAX_TOKEN, "0");
                         if (debug_mode) {
-                            printf("[DEBUG] Variable '%s' non définie\n", var_name);
+                            printf("[DEBUG] Variable '%s' créée automatiquement avec valeur 0\n", var_name);
                         }
                     }
                 }
