@@ -1,44 +1,134 @@
 
-// Ejemplo avanzado de código en SuperLenguaje
-// Demuestra todas las nuevas funcionalidades de Lilou 2.0
+// Ejemplo completo con todas las funcionalidades avanzadas de Lilou 3.0
 
-mostrar: === SuperLenguaje Demo ===
+// === VARIABLES Y TIPOS ===
+mostrar: === Demostración de SuperLenguaje 3.0 ===
 
-// Variables
+variable: numero = 42.5
+variable: texto = "¡Hola desde SuperLenguaje!"
 variable: contador = 0
-variable: limite = 5
+
+mostrar: Número: {numero}
+mostrar: Texto: {texto}
 mostrar: Contador inicial: {contador}
 
-// Condicionales
-si: contador < limite
-entonces: mostrar: El contador está dentro del límite
-sino: mostrar: El contador excede el límite
+// === ARRAYS ===
+array: fibonacci [1, 1, 2, 3, 5, 8, 13]
+array: nombres ["Ana", "Luis", "María", "Carlos"]
 
-// Bucles
-mostrar: Contando hasta 5:
-repetir: 5
-hacer: mostrar: Número {i}
+mostrar: Array fibonacci creado con números
+mostrar: Array nombres creado con strings
 
-// Operaciones matemáticas
-variable: resultado = 10 + 5 * 2
-mostrar: Resultado de 10 + 5 * 2 = {resultado}
+// === FUNCIONES MATEMÁTICAS ===
+variable: angulo = 30
+variable: seno = sin(angulo)
+variable: coseno = cos(angulo)
+variable: raiz = sqrt(25)
+variable: potencia = 2 ** 8
 
-// Números aleatorios
-mostrar: Número aleatorio entre 1 y 100:
+mostrar: Seno de {angulo}°: {seno}
+mostrar: Coseno de {angulo}°: {coseno}
+mostrar: Raíz cuadrada de 25: {raiz}
+mostrar: 2 elevado a 8: {potencia}
+
+// === CONDICIONALES AVANZADAS ===
+si: numero > 40 and numero < 50
+entonces: mostrar: El número está en el rango 40-50
+sino: mostrar: El número está fuera del rango 40-50
+
+si: seno > 0 or coseno > 0
+entonces: mostrar: Al menos una función trigonométrica es positiva
+
+// === FUNCIÓN CON PARÁMETROS ===
+funcion: calcular_area(base, altura) {
+    variable: area = base * altura / 2
+    mostrar: Calculando área del triángulo...
+    mostrar: Base: {base}, Altura: {altura}
+    mostrar: Área = {area}
+    retornar: area
+}
+
+// === FUNCIÓN RECURSIVA ===
+funcion: factorial(n) {
+    si: n <= 1
+    entonces: retornar: 1
+    sino: variable: temp = n - 1
+          variable: factorial_temp = factorial(temp)
+          variable: resultado = n * factorial_temp
+          retornar: resultado
+}
+
+// === LLAMADAS DE FUNCIÓN ===
+mostrar: === Probando funciones ===
+llamar: calcular_area(10, 6)
+llamar: calcular_area(15, 8)
+
+variable: fact5 = factorial(5)
+mostrar: Factorial de 5: {fact5}
+
+// === BUCLES AVANZADOS ===
+mostrar: === Contando con break ===
+repetir: 10
+hacer: si: i == 5
+       entonces: mostrar: Saliendo en iteración {i}
+                break
+       mostrar: Iteración {i}
+
+mostrar: === Bucle con continue ===
+repetir: 8
+hacer: si: i % 2 == 0
+       entonces: continue
+       mostrar: Número impar: {i}
+
+// === BUCLE WHILE ===
+mostrar: === Bucle while ===
+variable: countdown = 5
+mientras: countdown > 0
+hacer: mostrar: Countdown: {countdown}
+       variable: countdown = countdown - 1
+
+// === NÚMEROS ALEATORIOS ===
+mostrar: === Números aleatorios ===
+mostrar: Entero aleatorio 1-100:
 aleatorio: 1-100
 
-// Funciones
-funcion: despedida { mostrar: ¡Gracias por usar SuperLenguaje! }
-llamar: despedida
+mostrar: Decimal aleatorio 0-1:
+aleatorio_real: 0.0-1.0
 
-// Archivos
-escribir_archivo: saludo.txt, ¡Hola desde SuperLenguaje!
-mostrar: Archivo creado. Leyendo contenido:
-leer_archivo: saludo.txt
+mostrar: Número de la suerte:
+aleatorio: 1-10
 
-// Debug
+// === MANEJO DE ARCHIVOS ===
+mostrar: === Trabajando con archivos ===
+
+escribir_archivo: resultado.txt, Resultados de SuperLenguaje
+anexar_archivo: resultado.txt, Número: {numero}
+anexar_archivo: resultado.txt, Texto: {texto}
+anexar_archivo: resultado.txt, Área calculada: {area}
+anexar_archivo: resultado.txt, Factorial: {fact5}
+
+mostrar: Archivo 'resultado.txt' creado. Contenido:
+leer_archivo: resultado.txt
+
+// === ENTRADA INTERACTIVA (comentado para ejecución automática) ===
+// entrada: Ingresa tu nombre: 
+// mostrar: ¡Hola {entrada}!
+
+// === FUNCIONES DEL SISTEMA ===
+mostrar: === Esperando 2 segundos ===
+esperar: 2
+mostrar: ¡Tiempo completado!
+
+// mostrar: Limpiando pantalla en 3 segundos...
+// esperar: 3
+// limpiar_pantalla
+
+// === DEBUG Y ESTADO FINAL ===
 debug: on
+mostrar: === Estado final del programa ===
 debug: variables
+debug: funciones
+debug: arrays
 debug: off
 
-mostrar: === Fin del demo ===
+mostrar: === Programa completado exitosamente ===

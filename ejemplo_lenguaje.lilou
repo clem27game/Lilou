@@ -1,15 +1,16 @@
 
-
 Lilou programa - lenguaje de programación : MiLenguaje
 
 • Nombre del idioma: SuperLenguaje
 • extension: .super
-• operadores: +, -, *, /, %, =, ==, !=, <, >, <=, >=
-• palabras clave: mostrar, calcular, variable, si, entonces, sino, repetir, hacer, aleatorio, funcion, llamar
+• modo_estricto: off
+• sensible_mayusculas: on
+• operadores: +, -, *, /, %, **, =, ==, !=, <, >, <=, >=, and, or, y, o
+• palabras clave: mostrar, imprimir, calcular, variable, array, si, entonces, sino, repetir, hacer, mientras, aleatorio, aleatorio_real, funcion, llamar, retornar, entrada, esperar, limpiar_pantalla, break, continue, romper, continuar
 • mensaje de error: ¡Oops! Algo salió mal en SuperLenguaje
 • prefijo de salida: [SuperLenguaje] 
 
-// Este es un ejemplo avanzado de definición de lenguaje con Lilou 2.0
+// Este es un ejemplo avanzado de definición de lenguaje con Lilou 3.0
 // El lenguaje se llamará "SuperLenguaje" y usará la extensión .super
-// Incluye todas las nuevas funcionalidades: variables, condicionales, bucles, funciones, etc.
-
+// Incluye todas las nuevas funcionalidades: variables, strings, arrays, funciones matemáticas,
+// bucles avanzados, funciones con parámetros, entrada interactiva, y mucho más

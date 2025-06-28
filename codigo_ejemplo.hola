@@ -1,31 +1,59 @@
 
+// Ejemplo básico mejorado con las nuevas funcionalidades de Lilou 3.0
 
-// Ejemplo mejorado con las nuevas funcionalidades de Lilou
-mostrar: ¡Hola desde mi propio lenguaje de programación!
+mostrar: ¡Hola desde mi propio lenguaje de programación mejorado!
 
-// Variables
-variable: num1 = 5
-variable: num2 = 3
+// === VARIABLES CON TIPOS ===
+variable: num1 = 15.5
+variable: num2 = 4.2
+variable: saludo = "¡Bienvenido a mi lenguaje!"
 variable: resultado = num1 + num2 * 2
 
+mostrar: {saludo}
 mostrar: Calculando {num1} + {num2} * 2
 mostrar: El resultado es: {resultado}
 
-// Condicional
-si: resultado > 10
-entonces: mostrar: ¡El resultado es mayor que 10!
-sino: mostrar: El resultado es menor o igual que 10
+// === FUNCIONES MATEMÁTICAS ===
+variable: raiz_resultado = sqrt(resultado)
+variable: resultado_redondeado = round(resultado)
 
-// Bucle
-mostrar: Contando hasta 3:
-repetir: 3
-hacer: mostrar: Conteo: {i}
+mostrar: Raíz cuadrada del resultado: {raiz_resultado}
+mostrar: Resultado redondeado: {resultado_redondeado}
 
-// Función
-funcion: saludo_final { mostrar: ¡Mi lenguaje funciona perfectamente! }
-llamar: saludo_final
+// === CONDICIONAL MEJORADA ===
+si: resultado > 20 and resultado < 30
+entonces: mostrar: ¡El resultado está en el rango perfecto!
+sino: si: resultado > 30
+       entonces: mostrar: El resultado es muy alto
+       sino: mostrar: El resultado es muy bajo
 
-// Número aleatorio
-mostrar: Número de la suerte:
-aleatorio: 1-10
+// === BUCLE CON CONTROL ===
+mostrar: Contando hasta 5 (saltando el 3):
+repetir: 5
+hacer: si: i == 3
+       entonces: continue
+       mostrar: Conteo: {i}
 
+// === FUNCIÓN SIMPLE ===
+funcion: despedida_personalizada {
+    mostrar: ¡Gracias por probar mi lenguaje!
+    mostrar: El resultado final fue: {resultado}
+    variable: mensaje = "¡Hasta la vista!"
+    mostrar: {mensaje}
+}
+
+llamar: despedida_personalizada
+
+// === NÚMEROS ALEATORIOS ===
+mostrar: Tu número de la suerte de hoy:
+aleatorio: 1-100
+
+mostrar: Un decimal aleatorio:
+aleatorio_real: 0.0-10.0
+
+// === ARCHIVO DE SALUDO ===
+escribir_archivo: saludo.txt, ¡Hola desde SuperLenguaje!
+mostrar: Archivo de saludo creado
+leer_archivo: saludo.txt
+
+mostrar: === ¡Mi lenguaje funciona perfectamente! ===

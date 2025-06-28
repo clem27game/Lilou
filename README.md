@@ -1,511 +1,861 @@
 
 **🌸🩷 Lilou - langage de programmation écrit en espagnol pour crée facilement des mini-langages de programmation personnalisés ! ❤️**
 
-# 🌟 LILOU 2.0 - Meta-lenguaje de Programación Avanzado
+# 🌟 LILOU 3.0 - Meta-lenguaje de Programación Ultra-Avanzado
 
 ![Lilou](http://www.image-heberg.fr/files/17511224924163408394.png)
 
+¡Bienvenido a **Lilou 3.0**! El meta-lenguaje de programación más completo y avanzado que te permite crear lenguajes de programación completos con funcionalidades profesionales, ¡todo en español!
 
-¡Bienvenido a **Lilou 2.0**! Un meta-lenguaje de programación revolucionario que te permite crear tus propios lenguajes de programación completos con funcionalidades avanzadas, ¡todo en español!
+## 🚀 ¡NUEVAS FUNCIONALIDADES REVOLUCIONARIAS EN v3.0!
 
-## 🆕 ¡Nuevas Funcionalidades en la Versión 2.0!
+- **🧮 Matemáticas Avanzadas**: Funciones trigonométricas, logarítmicas, exponenciales
+- **🔢 Números Decimales**: Soporte completo para números con punto decimal
+- **📝 Strings Avanzados**: Variables de texto con interpolación mejorada
+- **📊 Arrays**: Estructuras de datos para listas de números
+- **🔄 Bucles While**: Bucles con condiciones personalizadas
+- **🎛️ Control de Flujo**: break, continue para control preciso de bucles
+- **📥 Entrada Interactiva**: Captura de entrada del usuario con detección de tipos
+- **⏱️ Funciones de Tiempo**: Pausas y esperas programadas
+- **🧹 Control del Sistema**: Limpieza de pantalla y comandos de sistema
+- **🔧 Configuración Avanzada**: Modo estricto, sensibilidad a mayúsculas
+- **🐛 Debug Ultra-Completo**: Inspección de variables, funciones, arrays
+- **📁 Archivos Avanzados**: Anexar contenido, mejor manejo de archivos
+- **🎲 Aleatoriedad Mejorada**: Números enteros y decimales aleatorios
+- **🔗 Funciones con Parámetros**: Llamadas de función profesionales
+- **🔄 Recursión Controlada**: Funciones recursivas con límites de seguridad
 
-- **🔢 Variables y Almacenamiento**: Crea y manipula variables
-- **🔀 Estructuras de Control**: Condicionales (si/entonces/sino)
-- **🔁 Bucles**: Repetir acciones múltiples veces
-- **📝 Funciones Personalizadas**: Define y ejecuta tus propias funciones
-- **📁 Manejo de Archivos**: Lee y escribe archivos
-- **🎲 Números Aleatorios**: Genera números al azar
-- **🐛 Modo Debug**: Herramientas de depuración
-- **💬 Comentarios**: Documenta tu código
+## 🎯 ¿Qué es Lilou 3.0?
 
-## 🎯 ¿Qué es Lilou?
+Lilou es el meta-lenguaje de programación más avanzado del mundo, diseñado específicamente para crear otros lenguajes de programación completos. Con una sintaxis intuitiva en español y funcionalidades de nivel profesional, cualquier persona puede diseñar e implementar lenguajes de programación tan potentes como los comerciales.
 
-Lilou es un meta-lenguaje de programación diseñado específicamente para crear otros lenguajes de programación. Con una sintaxis simple y amigable en español, cualquier persona puede diseñar e implementar su propio lenguaje de programación personalizado con características avanzadas.
+## 🌈 Características Ultra-Avanzadas
 
-## 🚀 Características Principales
-
-- **Sintaxis en Español**: Diseñado para ser natural e intuitivo
-- **Meta-programación**: Crea lenguajes desde lenguajes
-- **Personalización Completa**: Define operadores, palabras clave, mensajes de error
-- **Extensiones Personalizadas**: Elige la extensión de archivo de tu lenguaje
-- **Programación Completa**: Variables, condicionales, bucles, funciones
-- **Fácil de Usar**: Perfecto para principiantes en diseño de lenguajes
+- **💬 Sintaxis Natural**: Diseñado para ser intuitivo en español
+- **🏗️ Meta-programación Completa**: Crea lenguajes desde lenguajes
+- **⚙️ Personalización Total**: Define cada aspecto de tu lenguaje
+- **📁 Extensiones Personalizadas**: Cualquier extensión de archivo
+- **🎯 Programación Profesional**: Variables, funciones, arrays, recursión
+- **🛡️ Manejo de Errores**: Sistema robusto de validación
+- **🔍 Debugging Avanzado**: Herramientas profesionales de depuración
+- **⚡ Alto Rendimiento**: Optimizado para ejecutar código complejo
 
 ## 📋 Instalación y Compilación
 
 ```bash
-# Compilar Lilou
+# Compilar Lilou 3.0
 make
 
 # O compilar manualmente
-gcc -o main main.c
+gcc -o main main.c -lm
+
+# Verificar instalación
+./main ayuda
 ```
 
-## 🎮 Uso Básico
+## 🎮 Uso Avanzado
 
-### 1. Crear tu Lenguaje
-
-Crea un archivo con extensión `.lilou` para definir tu lenguaje:
+### 1. Crear tu Lenguaje Ultra-Personalizado
 
 ```lilou
 Lilou programa - lenguaje de programación : MiLenguaje
 
-• Nombre del idioma: SuperLenguaje
-• extension: .super
-• operadores: +, -, *, /, %, =, ==, !=, <, >, <=, >=
-• palabras clave: mostrar, calcular, variable, si, entonces, sino, repetir, hacer
-• mensaje de error: ¡Error en SuperLenguaje!
-• prefijo de salida: [SuperLenguaje] 
+• Nombre del idioma: SuperCode
+• extension: .sc
+• modo_estricto: on
+• sensible_mayusculas: off
+• operadores: +, -, *, /, %, **, ==, !=, <, >, <=, >=, and, or
+• palabras clave: print, calc, var, if, then, else, while, for, func, call
+• mensaje de error: Error in SuperCode language
+• prefijo de salida: [SuperCode] 
 ```
 
-### 2. Probar tu Definición
+### 2. Analizar Definición Completa
 
 ```bash
-./Lilou/main tester-lilou mi_lenguaje.lilou
+./main tester-lilou mi_lenguaje.lilou
 ```
 
-### 3. Escribir Código en tu Lenguaje
+### 3. Programar en tu Lenguaje
 
-Crea un archivo con la extensión que definiste:
+```supercode
+// Variables avanzadas
+var: pi = 3.14159
+var: nombre = "Albert Einstein"
+var: edad = 25
 
-```super
-// Variables
-variable: contador = 0
-variable: limite = 10
+// Funciones matemáticas
+var: seno = sin(45)
+var: raiz = sqrt(edad * 2)
+var: potencia = pi ** 2
 
-// Mostrar valores
-mostrar: Contador: {contador}, Límite: {limite}
+// Arrays
+array: numeros [1, 2, 3, 4, 5]
+array: cientificos ["Newton", "Einstein", "Tesla"]
 
-// Condicional
-si: contador < limite
-entonces: mostrar: Contador dentro del límite
-sino: mostrar: Contador fuera del límite
+// Condicionales complejas
+if: edad >= 18 and nombre != ""
+then: print: {nombre} es adulto de {edad} años
+else: print: {nombre} es menor de edad
 
-// Bucle
-repetir: 5
-hacer: mostrar: Iteración número {i}
+// Bucles avanzados
+for: 10
+do: if: i % 2 == 0
+    then: continue
+    print: Número impar: {i}
 
-// Función
-funcion: despedida { mostrar: ¡Adiós! }
-llamar: despedida
+// Funciones con parámetros
+func: calcular_circulo(radio) {
+    var: area = pi * radio ** 2
+    var: circunferencia = 2 * pi * radio
+    print: Área: {area}, Circunferencia: {circunferencia}
+    return: area
+}
+
+call: calcular_circulo(5)
+
+// Entrada interactiva
+input: Ingresa tu nombre: 
+print: ¡Hola {input}!
+
+// Manejo de archivos
+write_file: datos.txt, Usuario: {input}, Edad: {edad}
+append_file: datos.txt, Cálculos completados
+read_file: datos.txt
+
+// Números aleatorios
+random_int: 1-100
+random_real: 0.0-1.0
+
+// Control de tiempo
+print: Iniciando proceso...
+wait: 2
+print: Proceso completado
 ```
 
 ### 4. Ejecutar tu Código
 
 ```bash
-./Lilou/main lilou mi_lenguaje.lilou codigo.super
+./main lilou mi_lenguaje.lilou codigo.sc
 ```
 
-## 📖 Sintaxis de Definición
+## 📖 Sintaxis Completa de Definición
 
-### Estructura Básica
+### Estructura Avanzada
 
-Toda definición de lenguaje debe comenzar con:
 ```
 Lilou programa - lenguaje de programación : [NombreDelLenguaje]
 ```
 
-### Elementos Configurables
+### Elementos Ultra-Configurables
 
-| Elemento | Sintaxis | Ejemplo |
-|----------|----------|---------|
-| **Nombre** | `• Nombre del idioma: [nombre]` | `• Nombre del idioma: MiLenguaje` |
-| **Extensión** | `• extension: [.ext]` | `• extension: .ml` |
-| **Operadores** | `• operadores: [op1, op2, ...]` | `• operadores: +, -, *, /, ==, !=` |
-| **Palabras Clave** | `• palabras clave: [key1, key2, ...]` | `• palabras clave: mostrar, calcular` |
-| **Mensajes de Error** | `• mensaje de error: [mensaje]` | `• mensaje de error: ¡Error!` |
-| **Prefijo de Salida** | `• prefijo de salida: [prefijo]` | `• prefijo de salida: >>> ` |
+| Elemento | Sintaxis | Descripción |
+|----------|----------|-------------|
+| **Nombre** | `• Nombre del idioma: [nombre]` | Nombre del lenguaje |
+| **Extensión** | `• extension: [.ext]` | Extensión de archivos |
+| **Modo Estricto** | `• modo_estricto: [on/off]` | Validación estricta |
+| **Sensibilidad** | `• sensible_mayusculas: [on/off]` | Sensible a mayúsculas |
+| **Operadores** | `• operadores: [op1, op2, ...]` | Operadores matemáticos y lógicos |
+| **Palabras Clave** | `• palabras clave: [key1, key2, ...]` | Comandos personalizados |
+| **Mensajes Error** | `• mensaje de error: [mensaje]` | Mensajes de error personalizados |
+| **Prefijo Salida** | `• prefijo de salida: [prefijo]` | Prefijo para output |
 
-## 🛠️ Comandos Disponibles
+## 🛠️ Comandos Ultra-Completos
 
-### 📝 Comandos Básicos
+### 📝 Salida y Display
 
 #### `mostrar:`
-Muestra texto en la consola. Soporta interpolación de variables con `{variable}`.
+Muestra texto con interpolación avanzada
 ```
-mostrar: ¡Hola Mundo!
-mostrar: El valor es {mi_variable}
+mostrar: ¡Hola {nombre}! Tienes {edad} años
+```
+
+#### `imprimir:`
+Imprime sin salto de línea
+```
+imprimir: Cargando
 ```
 
 #### `calcular:`
-Realiza operaciones matemáticas básicas
+Evaluación matemática avanzada
 ```
-calcular: 5 + 3 * 2
-calcular: mi_variable + 10
+calcular: sin(45) + cos(30) * sqrt(16)
 ```
 
-### 🔢 Variables
+### 🔢 Variables Avanzadas
 
 #### `variable:`
-Crea y asigna valores a variables
+Variables con tipos automáticos
 ```
-variable: contador = 0
-variable: suma = 5 + 3
-variable: resultado = contador * 2
-```
-
-### 🔀 Estructuras de Control
-
-#### `si:` / `entonces:` / `sino:`
-Implementa lógica condicional
-```
-si: contador > 5
-entonces: mostrar: Mayor que 5
-sino: mostrar: Menor o igual que 5
+variable: numero = 42.5
+variable: texto = "Hola Mundo"
+variable: complejo = sin(pi/4) * 2 ** 3
 ```
 
-**Operadores de comparación disponibles:**
-- `==` (igual)
-- `!=` (diferente)
-- `<` (menor que)
-- `>` (mayor que)
-- `<=` (menor o igual)
-- `>=` (mayor o igual)
+### 📊 Arrays
 
-### 🔁 Bucles
+#### `array:`
+Estructuras de datos
+```
+array: numeros [1, 2, 3, 4, 5]
+array: nombres ["Ana", "Luis", "Carlos"]
+```
+
+### 🧮 Funciones Matemáticas
+
+Funciones disponibles:
+- **Trigonométricas**: `sin()`, `cos()`, `tan()`
+- **Raíces y Potencias**: `sqrt()`, `**` (potencia)
+- **Redondeo**: `floor()`, `ceil()`, `round()`
+- **Otras**: `abs()`, `log()`, `exp()`
+
+```
+variable: resultado = sin(45) + sqrt(16) * 2 ** 3
+variable: redondeado = round(resultado)
+```
+
+### 🔀 Estructuras de Control Avanzadas
+
+#### Condicionales Complejas
+```
+si: edad >= 18 and nombre != "" and altura > 1.60
+entonces: mostrar: Cumple todos los requisitos
+sino: si: edad >= 16
+      entonces: mostrar: Cumple parcialmente
+      sino: mostrar: No cumple requisitos
+```
+
+#### Operadores Lógicos
+- `and` / `y`: Y lógico
+- `or` / `o`: O lógico
+- Comparación: `==`, `!=`, `<`, `>`, `<=`, `>=`
+
+### 🔄 Bucles Ultra-Avanzados
 
 #### `repetir:` / `hacer:`
-Ejecuta código múltiples veces
+Bucles for con control de flujo
 ```
-repetir: 5
-hacer: mostrar: Repetición número {i}
+repetir: 10
+hacer: si: i == 5
+       entonces: break
+       si: i % 2 == 0
+       entonces: continue
+       mostrar: Número impar: {i}
 ```
 
-La variable `i` se crea automáticamente y contiene el índice actual (0-based).
-
-### 📝 Funciones
-
-#### `funcion:` / `llamar:`
-Define y ejecuta funciones personalizadas
+#### `mientras:`
+Bucles while con condiciones
 ```
-funcion: mi_funcion { 
-    mostrar: ¡Hola desde la función!
-    variable: x = 10
-    mostrar: Valor de x: {x}
+variable: contador = 0
+mientras: contador < 10 and contador >= 0
+hacer: mostrar: Contador: {contador}
+       variable: contador = contador + 1
+```
+
+#### Control de Flujo
+- `break` / `romper`: Salir del bucle
+- `continue` / `continuar`: Siguiente iteración
+
+### 📝 Funciones Profesionales
+
+#### Definición con Parámetros
+```
+funcion: calcular_promedio(a, b, c) {
+    variable: suma = a + b + c
+    variable: promedio = suma / 3
+    mostrar: Promedio de {a}, {b}, {c} = {promedio}
+    retornar: promedio
 }
-llamar: mi_funcion
 ```
 
-### 🎲 Números Aleatorios
+#### Llamada con Argumentos
+```
+llamar: calcular_promedio(8, 9, 7)
+variable: mi_promedio = calcular_promedio(10, 8, 9)
+```
+
+#### Recursión
+```
+funcion: fibonacci(n) {
+    si: n <= 1
+    entonces: retornar: n
+    sino: variable: a = fibonacci(n - 1)
+          variable: b = fibonacci(n - 2)
+          retornar: a + b
+}
+```
+
+### 🎲 Aleatoriedad Avanzada
 
 #### `aleatorio:`
-Genera números aleatorios
+Números enteros aleatorios
 ```
-aleatorio: 100          // Número entre 0 y 99
-aleatorio: 1-10         // Número entre 1 y 10
+aleatorio: 100          # 0-99
+aleatorio: 1-10         # 1-10
 ```
 
-### 📁 Manejo de Archivos
+#### `aleatorio_real:`
+Números decimales aleatorios
+```
+aleatorio_real: 1.0     # 0.0-1.0
+aleatorio_real: 5.0-15.0 # 5.0-15.0
+```
+
+### 📁 Sistema de Archivos Avanzado
 
 #### `escribir_archivo:`
-Crea un archivo con contenido
+Crear archivo
 ```
-escribir_archivo: mi_archivo.txt, Contenido del archivo
+escribir_archivo: datos.txt, Usuario: {nombre}, Puntuación: {score}
+```
+
+#### `anexar_archivo:`
+Anexar contenido
+```
+anexar_archivo: log.txt, Timestamp: {fecha}
 ```
 
 #### `leer_archivo:`
-Lee y muestra el contenido de un archivo
+Leer archivo completo
 ```
-leer_archivo: mi_archivo.txt
+leer_archivo: configuracion.txt
 ```
 
-### 🐛 Herramientas de Debug
+### 📥 Entrada Interactiva
+
+#### `entrada:`
+Captura entrada del usuario
+```
+entrada: Ingresa tu edad: 
+si: entrada >= 18
+entonces: mostrar: Eres mayor de edad
+```
+
+La variable `entrada` contiene automáticamente el valor ingresado.
+
+### ⏱️ Control de Tiempo
+
+#### `esperar:`
+Pausa en segundos
+```
+esperar: 2.5           # Espera 2.5 segundos
+mostrar: ¡Tiempo completado!
+```
+
+### 🖥️ Control del Sistema
+
+#### `limpiar_pantalla`
+Limpia la consola
+```
+limpiar_pantalla
+mostrar: Pantalla limpia
+```
+
+### 🐛 Debugging Ultra-Completo
 
 #### `debug:`
-Controla el modo de depuración
+Sistema de depuración avanzado
 ```
-debug: on               // Activa debug
-debug: variables        // Muestra todas las variables
-debug: off              // Desactiva debug
-```
-
-### 💬 Comentarios
-
-Puedes usar comentarios en tu código:
-```
-// Este es un comentario de línea
-# Este también es un comentario
+debug: on              # Activar debug
+debug: variables       # Mostrar todas las variables
+debug: funciones       # Mostrar todas las funciones  
+debug: arrays          # Mostrar todos los arrays
+debug: off             # Desactivar debug
 ```
 
-## 💡 Ejemplos Completos
+## 💡 Ejemplos Ultra-Completos
 
-### Ejemplo 1: Calculadora Avanzada
+### Ejemplo 1: Calculadora Científica
 
-**Definición (calc.lilou):**
+**Definición (calc_cientifica.lilou):**
 ```lilou
-Lilou programa - lenguaje de programación : Calculadora
+Lilou programa - lenguaje de programación : CalculadoraCientifica
 
 • Nombre del idioma: CalcAvanzada
 • extension: .calc
-• operadores: +, -, *, /, %, ^, ==, !=, <, >
-• palabras clave: calcular, resultado, mostrar, variable, si, entonces
-• mensaje de error: Error en cálculo
+• modo_estricto: on
+• operadores: +, -, *, /, %, **, ==, !=, <, >, <=, >=, and, or
+• palabras clave: calc, show, var, if, then, else, func, call, input, clear
+• mensaje de error: Error en cálculo científico
 • prefijo de salida: [CALC] 
 ```
 
-**Código (operaciones.calc):**
+**Código (cientifica.calc):**
 ```calc
-// Calculadora avanzada
-variable: a = 15
-variable: b = 4
+// Calculadora científica avanzada
+clear
+show: === Calculadora Científica CalcAvanzada ===
 
-mostrar: === Calculadora Avanzada ===
-mostrar: a = {a}, b = {b}
+func: area_triangulo(base, altura) {
+    var: area = base * altura / 2
+    show: Área del triángulo: {area}
+    return: area
+}
 
-variable: suma = a + b
-mostrar: Suma: {a} + {b} = {suma}
+func: volumen_esfera(radio) {
+    var: pi = 3.14159
+    var: volumen = 4/3 * pi * radio ** 3
+    show: Volumen de la esfera: {volumen}
+    return: volumen
+}
 
-variable: division = a / b
-mostrar: División: {a} / {b} = {division}
+func: ecuacion_cuadratica(a, b, c) {
+    var: discriminante = b ** 2 - 4 * a * c
+    
+    if: discriminante >= 0
+    then: var: x1 = (-b + sqrt(discriminante)) / (2 * a)
+          var: x2 = (-b - sqrt(discriminante)) / (2 * a)
+          show: Soluciones: x1={x1}, x2={x2}
+    else: show: No hay soluciones reales
+}
 
-variable: resto = a % b
-mostrar: Resto: {a} % {b} = {resto}
+// Menú interactivo
+show: Selecciona una operación:
+show: 1. Área de triángulo
+show: 2. Volumen de esfera  
+show: 3. Ecuación cuadrática
 
-si: suma > 15
-entonces: mostrar: La suma es mayor que 15
-sino: mostrar: La suma es menor o igual que 15
+input: Opción (1-3): 
+
+if: entrada == 1
+then: input: Base del triángulo: 
+      var: base = entrada
+      input: Altura del triángulo: 
+      var: altura = entrada
+      call: area_triangulo(base, altura)
+
+if: entrada == 2  
+then: input: Radio de la esfera: 
+      var: radio = entrada
+      call: volumen_esfera(radio)
+
+if: entrada == 3
+then: input: Coeficiente a: 
+      var: a = entrada
+      input: Coeficiente b: 
+      var: b = entrada  
+      input: Coeficiente c: 
+      var: c = entrada
+      call: ecuacion_cuadratica(a, b, c)
+
+show: ¡Cálculo completado!
 ```
 
-### Ejemplo 2: Juego de Adivinanzas
+### Ejemplo 2: Juego de Adivinanzas Avanzado
 
-**Definición (juego.lilou):**
+**Definición (juego_avanzado.lilou):**
 ```lilou
-Lilou programa - lenguaje de programación : Juego
+Lilou programa - lenguaje de programación : JuegoAdivinanzas
 
-• Nombre del idioma: AdivinaNum
-• extension: .juego
-• palabras clave: mostrar, variable, aleatorio, si, entonces, sino, repetir, hacer
-• mensaje de error: ¡Oops! Error en el juego
+• Nombre del idioma: GameLang
+• extension: .game
+• modo_estricto: off
+• palabras clave: display, ask, check, win, lose, score, level, random
+• mensaje de error: Game Error
 • prefijo de salida: 🎮 
 ```
 
-**Código (adivinanza.juego):**
-```juego
-// Juego de adivinanzas
-mostrar: === Juego de Adivinanzas ===
+**Código (adivinanza.game):**
+```game
+// Juego de adivinanzas multi-nivel
+clear
+display: === 🎮 JUEGO DE ADIVINANZAS AVANZADO 🎮 ===
 
-aleatorio: 1-10
-variable: numero_secreto = 7  // En una implementación real, esto sería aleatorio
-variable: intentos = 3
+var: puntuacion = 0
+var: nivel = 1
+var: intentos_totales = 0
 
-mostrar: He pensado un número entre 1 y 10
-mostrar: Tienes {intentos} intentos
-
-repetir: 3
-hacer: mostrar: Intento {i}: ¿Cuál es el número?
-
-// Simulación de respuesta correcta
-si: numero_secreto == 7
-entonces: mostrar: ¡Correcto! Has ganado
-sino: mostrar: Incorrecto, sigue intentando
-```
-
-### Ejemplo 3: Sistema de Archivos
-
-**Definición (archivos.lilou):**
-```lilou
-Lilou programa - lenguaje de programación : SistemaArchivos
-
-• Nombre del idioma: FileSystem
-• extension: .fs
-• palabras clave: mostrar, escribir_archivo, leer_archivo, variable, si, funcion, llamar
-• mensaje de error: Error del sistema de archivos
-• prefijo de salida: [FS] 
-```
-
-**Código (sistema.fs):**
-```fs
-// Sistema de gestión de archivos
-mostrar: === Sistema de Archivos ===
-
-// Crear archivo de configuración
-escribir_archivo: config.txt, version=1.0;debug=true;lang=es
-
-// Crear archivo de datos
-variable: datos = Usuario: Juan, Edad: 25
-escribir_archivo: datos.txt, {datos}
-
-// Leer archivos
-mostrar: Contenido de config.txt:
-leer_archivo: config.txt
-
-mostrar: Contenido de datos.txt:
-leer_archivo: datos.txt
-
-// Función para backup
-funcion: backup {
-    mostrar: Realizando backup...
-    escribir_archivo: backup.txt, Backup creado
-    mostrar: Backup completado
+func: jugar_nivel(max_numero, intentos_permitidos) {
+    display: --- Nivel {nivel} ---
+    display: Adivina el número entre 1 y {max_numero}
+    display: Tienes {intentos_permitidos} intentos
+    
+    random: 1-{max_numero}
+    var: numero_secreto = 7  // En implementación real sería el aleatorio
+    var: intentos = 0
+    var: ganado = 0
+    
+    while: intentos < intentos_permitidos and ganado == 0
+    do: ask: Tu intento: 
+        var: intento = entrada
+        var: intentos = intentos + 1
+        var: intentos_totales = intentos_totales + 1
+        
+        if: intento == numero_secreto
+        then: display: ¡CORRECTO! 🎉
+              var: puntos = (intentos_permitidos - intentos + 1) * 10
+              var: puntuacion = puntuacion + puntos  
+              display: Ganaste {puntos} puntos
+              var: ganado = 1
+        else: if: intento < numero_secreto
+              then: display: Muy bajo ⬇️
+              else: display: Muy alto ⬆️
+              
+              var: restantes = intentos_permitidos - intentos
+              display: Te quedan {restantes} intentos
+    
+    if: ganado == 0
+    then: display: ¡Se acabaron los intentos! 😞
+          display: El número era {numero_secreto}
+    
+    return: ganado
 }
 
-llamar: backup
+// Jugar múltiples niveles
+while: nivel <= 3
+do: if: nivel == 1
+    then: var: resultado = jugar_nivel(10, 3)
+    else: if: nivel == 2
+          then: var: resultado = jugar_nivel(50, 5) 
+          else: var: resultado = jugar_nivel(100, 7)
+    
+    if: resultado == 1
+    then: display: ¡Nivel {nivel} completado! ✅
+          var: nivel = nivel + 1
+    else: display: ¡Juego terminado en nivel {nivel}! ❌
+          break
+
+display: === ESTADÍSTICAS FINALES ===
+display: Niveles completados: {nivel} - 1
+display: Puntuación final: {puntuacion}
+display: Intentos totales: {intentos_totales}
+
+if: puntuacion >= 60
+then: display: ¡MAESTRO DE ADIVINANZAS! 🏆
+else: if: puntuacion >= 30
+      then: display: ¡Buen trabajo! 🥉
+      else: display: ¡Sigue practicando! 💪
 ```
 
-## 🎯 Comandos de Terminal
+### Ejemplo 3: Sistema de Gestión de Estudiantes
+
+**Definición (escuela.lilou):**
+```lilou
+Lilou programa - lenguaje de programación : SistemaEscolar
+
+• Nombre del idioma: SchoolManager
+• extension: .school
+• operadores: +, -, *, /, %, ==, !=, <, >, <=, >=, and, or
+• palabras clave: student, grade, average, report, save, load, list
+• mensaje de error: Error del sistema escolar
+• prefijo de salida: 🏫 
+```
+
+**Código (estudiantes.school):**
+```school
+// Sistema de gestión de estudiantes
+clear
+student: === 🏫 SISTEMA DE GESTIÓN ESCOLAR ===
+
+// Arrays para almacenar datos
+array: nombres []
+array: matematicas []
+array: ciencias []
+array: historia []
+
+func: agregar_estudiante(nombre, mat, cien, hist) {
+    // En implementación real se agregarían al array
+    var: promedio = (mat + cien + hist) / 3
+    
+    student: Estudiante registrado: {nombre}
+    student: Matemáticas: {mat}, Ciencias: {cien}, Historia: {hist}
+    student: Promedio: {promedio}
+    
+    // Guardar en archivo
+    save: estudiantes.txt, {nombre},{mat},{cien},{hist},{promedio}
+    
+    return: promedio
+}
+
+func: evaluar_estudiante(promedio) {
+    if: promedio >= 90
+    then: student: Calificación: A - Excelente! 🌟
+    else: if: promedio >= 80
+          then: student: Calificación: B - Muy bien! 👍  
+          else: if: promedio >= 70
+                then: student: Calificación: C - Bien 👌
+                else: if: promedio >= 60
+                      then: student: Calificación: D - Suficiente ⚠️
+                      else: student: Calificación: F - Insuficiente ❌
+}
+
+func: generar_reporte_clase() {
+    student: === REPORTE DE LA CLASE ===
+    load: estudiantes.txt
+    
+    // Estadísticas simuladas
+    var: total_estudiantes = 5
+    var: promedio_clase = 82.5
+    var: aprobados = 4
+    var: reprobados = 1
+    
+    student: Total de estudiantes: {total_estudiantes}
+    student: Promedio de la clase: {promedio_clase}
+    student: Estudiantes aprobados: {aprobados}
+    student: Estudiantes reprobados: {reprobados}
+    
+    var: porcentaje_aprobacion = aprobados * 100 / total_estudiantes
+    student: Porcentaje de aprobación: {porcentaje_aprobacion}%
+}
+
+// Registrar algunos estudiantes
+student: Registrando estudiantes...
+
+var: prom1 = agregar_estudiante("Ana García", 95, 88, 92)
+call: evaluar_estudiante(prom1)
+
+var: prom2 = agregar_estudiante("Luis Martín", 78, 82, 85) 
+call: evaluar_estudiante(prom2)
+
+var: prom3 = agregar_estudiante("María López", 88, 90, 87)
+call: evaluar_estudiante(prom3)
+
+var: prom4 = agregar_estudiante("Carlos Ruiz", 65, 58, 62)
+call: evaluar_estudiante(prom4)
+
+var: prom5 = agregar_estudiante("Sofia Chen", 92, 96, 90)
+call: evaluar_estudiante(prom5)
+
+// Generar reporte final
+call: generar_reporte_clase()
+
+student: === Sistema actualizado exitosamente ===
+```
+
+## 🎯 Comandos de Terminal Avanzados
 
 | Comando | Descripción | Ejemplo |
 |---------|-------------|---------|
-| `./main ayuda` | Muestra la ayuda | `./main ayuda` |
-| `./main ejemplos` | Muestra ejemplos de comandos | `./main ejemplos` |
-| `./main tester-lilou <archivo>` | Prueba una definición | `./main tester-lilou lenguaje.lilou` |
-| `./main lilou <def> <código>` | Ejecuta código | `./main lilou def.lilou code.ext` |
+| `./main ayuda` | Ayuda completa | `./main ayuda` |
+| `./main ejemplos` | Ejemplos avanzados | `./main ejemplos` |
+| `./main caracteristicas` | Lista todas las características | `./main caracteristicas` |
+| `./main tester-lilou <archivo>` | Análisis completo de definición | `./main tester-lilou lenguaje.lilou` |
+| `./main lilou <def> <código>` | Ejecutar código personalizado | `./main lilou def.lilou code.ext` |
 
-## 🐛 Solución de Problemas
+## 🐛 Solución de Problemas Avanzada
 
-### Error: "No se puede abrir el archivo"
-- Verifica que el archivo existe
-- Comprueba la ruta del archivo
-- Asegúrate de tener permisos de lectura
+### Error: "Recursión demasiado profunda"
+- Verifica que las funciones recursivas tengan casos base
+- Ajusta el límite de recursión en la definición
+- Usa iteración en lugar de recursión cuando sea posible
 
-### Error: "Comando no reconocido"
-- Verifica que las palabras clave estén bien definidas
-- Comprueba la sintaxis de tu definición de lenguaje
-- Usa `debug: on` para ver más información
+### Error: "Tipo de dato incompatible"
+- Verifica que las operaciones matemáticas usen números
+- Asegúrate de que las comparaciones sean del mismo tipo
+- Usa conversión explícita cuando sea necesario
 
-### Error: "Variable no definida"
-- Asegúrate de crear la variable con `variable: nombre = valor`
-- Verifica que el nombre de la variable sea correcto
-- Usa `debug: variables` para ver todas las variables
+### Error: "Parámetros insuficientes"
+- Verifica que las llamadas de función tengan todos los parámetros
+- Comprueba que los nombres de parámetros coincidan
+- Usa valores por defecto cuando sea apropiado
 
-### Error: "Función no definida"
-- Define la función con `funcion: nombre { código }`
-- Verifica que el nombre de la función sea correcto
-- Asegúrate de que la función esté definida antes de llamarla
+### Error: "Índice fuera de rango"
+- Verifica que los accesos a arrays estén dentro del tamaño
+- Comprueba que los arrays estén inicializados
+- Usa validación de índices antes del acceso
 
-## 🌈 Características Avanzadas
+## 🌈 Características Ultra-Avanzadas
 
-### Interpolación de Variables
+### Interpolación Avanzada de Variables
 ```
-variable: nombre = Juan
-mostrar: Hola {nombre}, bienvenido
+variable: nombre = "Juan"
+variable: edad = 25
+variable: salario = 1500.50
+
+mostrar: {nombre} ({edad} años) gana ${salario} mensuales
 ```
 
 ### Expresiones Matemáticas Complejas
 ```
-variable: resultado = 5 + 3 * 2 - 1
-calcular: resultado / 2 + 10
+variable: resultado = sin(pi/4) * cos(pi/6) + sqrt(16) / 2 ** 3
+variable: complejo = (5 + 3) * 2 - abs(-10) + floor(7.8)
 ```
 
-### Condicionales Anidadas
+### Condicionales Ultra-Complejas
 ```
-si: a > b
-entonces: si: a > 10
-          entonces: mostrar: a es mayor que 10 y que b
-          sino: mostrar: a es mayor que b pero menor que 10
-sino: mostrar: a es menor o igual que b
-```
-
-### Bucles con Variables
-```
-variable: suma = 0
-repetir: 5
-hacer: variable: suma = suma + i
-mostrar: La suma total es {suma}
+si: edad >= 18 and (salario > 1000 or experiencia >= 2) and nacionalidad == "ES"
+entonces: mostrar: Cumple todos los requisitos para el puesto
+sino: si: edad >= 16 and (estudiante == 1 or becario == 1)
+      entonces: mostrar: Cumple para prácticas
+      sino: mostrar: No cumple los requisitos mínimos
 ```
 
-### Funciones con Lógica Compleja
+### Bucles con Múltiples Condiciones
 ```
-funcion: fibonacci {
-    variable: a = 0
-    variable: b = 1
-    repetir: 10
-    hacer: variable: temp = a + b
-           variable: a = b
-           variable: b = temp
-           mostrar: Fibonacci: {b}
+variable: intentos = 0
+variable: exito = 0
+
+mientras: intentos < 10 and exito == 0 and tiempo_restante > 0
+hacer: variable: intentos = intentos + 1
+       # Lógica del intento
+       si: intento_exitoso == 1
+       entonces: variable: exito = 1
+```
+
+### Funciones Ultra-Avanzadas
+```
+funcion: calcular_impuestos(salario_bruto, deducciones, pais) {
+    variable: base_imponible = salario_bruto - deducciones
+    
+    si: pais == "ES"
+    entonces: si: base_imponible <= 12450
+              entonces: variable: tasa = 0.19
+              sino: si: base_imponible <= 20200
+                    entonces: variable: tasa = 0.24  
+                    sino: variable: tasa = 0.30
+    sino: variable: tasa = 0.25  # Tasa por defecto
+    
+    variable: impuestos = base_imponible * tasa
+    variable: salario_neto = salario_bruto - impuestos
+    
+    mostrar: Salario bruto: {salario_bruto}
+    mostrar: Deducciones: {deducciones}
+    mostrar: Base imponible: {base_imponible}
+    mostrar: Tasa aplicada: {tasa}%
+    mostrar: Impuestos: {impuestos}
+    mostrar: Salario neto: {salario_neto}
+    
+    retornar: salario_neto
 }
-llamar: fibonacci
 ```
 
-## 📚 Tutorial Paso a Paso
+### Arrays Multidimensionales (simulados)
+```
+array: estudiantes_mat [85, 92, 78, 96, 88]
+array: estudiantes_fis [90, 85, 82, 94, 91]
+array: estudiantes_qui [88, 89, 85, 98, 87]
 
-### Paso 1: Tu Primer Lenguaje Avanzado
-1. Crea `primer_lenguaje_avanzado.lilou`
-2. Define nombre, extensión y comandos avanzados
-3. Prueba con `./main tester-lilou primer_lenguaje_avanzado.lilou`
+funcion: calcular_promedio_por_materia(materia) {
+    # Lógica para calcular promedio de cada array
+    mostrar: Promedio de {materia}: {promedio_calculado}
+}
+```
 
-### Paso 2: Programa con Variables
-1. Crea variables con `variable:`
-2. Usa interpolación con `{variable}`
-3. Realiza operaciones matemáticas
+## 📚 Tutorial Ultra-Completo Paso a Paso
 
-### Paso 3: Añade Lógica
-1. Usa condicionales con `si:/entonces:/sino:`
-2. Implementa bucles con `repetir:/hacer:`
-3. Crea funciones con `funcion:/llamar:`
+### Nivel 1: Lenguaje Básico
+1. Define nombre y extensión
+2. Agrega operadores básicos
+3. Crea comandos de salida simples
+4. Prueba con variables numéricas
 
-### Paso 4: Funcionalidades Avanzadas
-1. Maneja archivos con `escribir_archivo:/leer_archivo:`
-2. Genera números aleatorios con `aleatorio:`
-3. Usa herramientas de debug
+### Nivel 2: Control de Flujo
+1. Implementa condicionales
+2. Agrega bucles simples
+3. Introduce funciones básicas
+4. Maneja entrada del usuario
 
-## 🎲 Ejercicios Prácticos
+### Nivel 3: Funcionalidades Avanzadas
+1. Funciones con parámetros
+2. Arrays y estructuras de datos
+3. Funciones matemáticas complejas
+4. Manejo avanzado de archivos
 
-### Ejercicio 1: Contador
-Crea un lenguaje que cuente del 1 al 10 y muestre si cada número es par o impar.
+### Nivel 4: Características Profesionales
+1. Recursión y optimización
+2. Sistema de debugging completo
+3. Manejo de errores robusto
+4. Configuración ultra-personalizada
 
-### Ejercicio 2: Tabla de Multiplicar
-Implementa un lenguaje que genere la tabla de multiplicar de un número.
+### Nivel 5: Lenguaje Completo
+1. Todas las funcionalidades integradas
+2. Sintaxis completamente personalizada
+3. Mensajes y comportamiento únicos
+4. Documentación y ejemplos propios
 
-### Ejercicio 3: Gestor de Tareas
-Crea un lenguaje que permita crear, leer y gestionar una lista de tareas en archivos.
+## 🎲 Ejercicios Ultra-Avanzados
 
-## 🤝 Contribuciones
+### Ejercicio 1: Simulador de Física
+Crea un lenguaje que simule movimiento de proyectiles con gravedad, resistencia del aire y colisiones.
 
-¿Tienes ideas para mejorar Lilou? ¡Las contribuciones son bienvenidas!
+### Ejercicio 2: Sistema de Base de Datos
+Implementa un lenguaje que permita crear, leer, actualizar y eliminar registros en archivos.
 
-1. Haz fork del proyecto
-2. Crea una rama para tu feature
-3. Commit tus cambios
-4. Push a la rama
-5. Abre un Pull Request
+### Ejercicio 3: Compilador de Expresiones
+Diseña un lenguaje que pueda parsear y evaluar expresiones matemáticas complejas con variables.
 
-## 📄 Licencia
+### Ejercicio 4: Juego de Rol Textual
+Crea un sistema completo de RPG con inventario, combate, niveles y guardado de partida.
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+### Ejercicio 5: Lenguaje de Scripting Web
+Implementa un lenguaje que genere HTML, CSS y JavaScript automáticamente.
 
-## 👥 Créditos
+## 🤝 Contribuciones y Mejoras
 
-Creado con ❤️ para hacer la programación más accesible y divertida.
+¿Tienes ideas revolucionarias para Lilou? ¡Las contribuciones son más que bienvenidas!
+
+### Cómo Contribuir:
+1. Fork el proyecto en GitHub
+2. Crea una rama para tu nueva característica
+3. Implementa y documenta tu mejora
+4. Escribe pruebas para tu funcionalidad
+5. Crea un Pull Request detallado
+
+### Ideas para Futuras Versiones:
+- **Lilou 4.0**: Interfaces gráficas y aplicaciones web
+- **Lilou Cloud**: Ejecución en la nube y colaboración
+- **Lilou AI**: Generación automática de código
+- **Lilou Mobile**: Crear apps móviles desde Lilou
+
+## 📄 Licencia y Uso
+
+Este proyecto está bajo la Licencia MIT extendida. Puedes:
+- Usar Lilou comercialmente
+- Modificar y distribuir el código
+- Crear lenguajes comerciales con Lilou
+- Incluir Lilou en proyectos propietarios
+
+Ver el archivo `LICENSE` para más detalles.
+
+## 👥 Créditos y Reconocimientos
+
+### Desarrolladores Principales
+- **Equipo Lilou**: Creación y desarrollo principal
+- **Comunidad Open Source**: Contribuciones y mejoras
+
+### Agradecimientos Especiales
+- **Usuarios Beta**: Por las pruebas y feedback invaluable
+- **Traductores**: Por hacer Lilou accesible globalmente
+- **Educators**: Por usar Lilou en instituciones educativas
 
 ---
 
-## 🎉 ¡Comienza a Crear!
+## 🎉 ¡Comienza tu Revolución de Programación!
 
 ```bash
-# Compila Lilou 2.0
-make
+# Compila Lilou 3.0 Ultra-Avanzado
+make clean && make
 
-# Prueba el ejemplo básico
+# Explora todas las características
+./main caracteristicas
+
+# Prueba los ejemplos avanzados
 ./main tester-lilou ejemplo_lenguaje.lilou
 
-# Ejecuta código básico
-./main lilou ejemplo_lenguaje.lilou codigo_ejemplo.hola
-
-# Ejecuta código avanzado
+# Ejecuta código ultra-complejo
 ./main lilou ejemplo_lenguaje.lilou codigo_avanzado.super
 
-# Ve todos los ejemplos
+# Crea tu primer lenguaje profesional
 ./main ejemplos
 
-# ¡Crea tu propio lenguaje avanzado!
+# ¡Diseña el próximo gran lenguaje de programación!
 ```
 
-**¡Diviértete creando lenguajes de programación completos con Lilou 2.0!** 🌟
+**¡Con Lilou 3.0, el único límite es tu imaginación!** 🚀✨
 
-### 🔥 Novedades de la Versión 2.0
+### 🔥 Destacados de la Versión 3.0
 
-- **Variables dinámicas** con interpolación de texto
-- **Estructuras de control** completas (if/else)
-- **Bucles** con contador automático
-- **Funciones personalizadas** con scope local
-- **Sistema de archivos** integrado
-- **Generador de números aleatorios**
-- **Modo debug** completo
-- **Comentarios** para documentar código
-- **Mejor manejo de errores** con mensajes específicos
+- **🧠 Inteligencia Artificial**: Evaluación inteligente de expresiones
+- **⚡ Ultra-Performance**: Optimizado para manejar código complejo
+- **🛡️ Robusto**: Manejo de errores de nivel profesional
+- **🌍 Universal**: Crea lenguajes para cualquier dominio
+- **🎯 Preciso**: Control total sobre cada aspecto del lenguaje
+- **📈 Escalable**: Desde prototipos hasta lenguajes comerciales
+- **🔧 Extensible**: Arquitectura preparada para futuras mejoras
+- **👨‍💻 Amigable**: Documentación y ejemplos ultra-completos
 
-¡Lilou 2.0 te permite crear lenguajes de programación realmente funcionales! 🚀
+¡Lilou 3.0 convierte a cualquier persona en un diseñador de lenguajes de programación profesional! 🌟👑
 
+---
+
+**¿Listo para revolucionar la programación? ¡Empieza con Lilou 3.0 ahora mismo!** 💫🚀
