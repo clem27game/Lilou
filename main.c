@@ -510,32 +510,44 @@ void map_custom_keyword_to_internal(char *line, char *output, char *custom_keywo
     content++; // Skip the ':'
     trim_whitespace(content);
 
-    // Mapear mots-clés personalizados vers comandos internos
+    // Mapear TOUS les mots-clés personnalisés vers des commandes internes appropriées
+    // Mots-clés d'affichage
     if (strcmp(custom_keyword, "print") == 0 || 
         strcmp(custom_keyword, "afficher") == 0 || 
         strcmp(custom_keyword, "imprimir") == 0 ||
         strcmp(custom_keyword, "display") == 0 ||
-        strcmp(custom_keyword, "show") == 0) {
+        strcmp(custom_keyword, "show") == 0 ||
+        strcmp(custom_keyword, "echo") == 0 ||
+        strcmp(custom_keyword, "write") == 0 ||
+        strcmp(custom_keyword, "output") == 0) {
         snprintf(output, MAX_LINE, "mostrar: %s", content);
     }
+    // Mots-clés de calcul
     else if (strcmp(custom_keyword, "calc") == 0 || 
              strcmp(custom_keyword, "calculate") == 0 ||
-             strcmp(custom_keyword, "calcular") == 0) {
+             strcmp(custom_keyword, "calculer") == 0 ||
+             strcmp(custom_keyword, "compute") == 0 ||
+             strcmp(custom_keyword, "eval") == 0) {
         snprintf(output, MAX_LINE, "calcular: %s", content);
     }
+    // Mots-clés de variables
     else if (strcmp(custom_keyword, "var") == 0 || 
              strcmp(custom_keyword, "variable") == 0 ||
              strcmp(custom_keyword, "let") == 0 ||
-             strcmp(custom_keyword, "const") == 0) {
+             strcmp(custom_keyword, "const") == 0 ||
+             strcmp(custom_keyword, "set") == 0 ||
+             strcmp(custom_keyword, "define") == 0) {
         snprintf(output, MAX_LINE, "variable: %s", content);
     }
+    // Mots-clés conditionnels
     else if (strcmp(custom_keyword, "if") == 0 || 
              strcmp(custom_keyword, "si") == 0) {
         snprintf(output, MAX_LINE, "si: %s", content);
     }
     else if (strcmp(custom_keyword, "then") == 0 || 
              strcmp(custom_keyword, "alors") == 0 ||
-             strcmp(custom_keyword, "entonces") == 0) {
+             strcmp(custom_keyword, "entonces") == 0 ||
+             strcmp(custom_keyword, "do") == 0) {
         snprintf(output, MAX_LINE, "entonces: %s", content);
     }
     else if (strcmp(custom_keyword, "else") == 0 || 
@@ -543,14 +555,18 @@ void map_custom_keyword_to_internal(char *line, char *output, char *custom_keywo
              strcmp(custom_keyword, "sino") == 0) {
         snprintf(output, MAX_LINE, "sino: %s", content);
     }
+    // Mots-clés de boucles
     else if (strcmp(custom_keyword, "for") == 0 || 
              strcmp(custom_keyword, "repeat") == 0 ||
-             strcmp(custom_keyword, "repetir") == 0) {
+             strcmp(custom_keyword, "repetir") == 0 ||
+             strcmp(custom_keyword, "pour") == 0 ||
+             strcmp(custom_keyword, "loop") == 0) {
         snprintf(output, MAX_LINE, "repetir: %s", content);
     }
-    else if (strcmp(custom_keyword, "do") == 0 || 
-             strcmp(custom_keyword, "hacer") == 0 ||
-             strcmp(custom_keyword, "faire") == 0) {
+    else if (strcmp(custom_keyword, "hacer") == 0 ||
+             strcmp(custom_keyword, "faire") == 0 ||
+             strcmp(custom_keyword, "execute") == 0 ||
+             strcmp(custom_keyword, "run") == 0) {
         snprintf(output, MAX_LINE, "hacer: %s", content);
     }
     else if (strcmp(custom_keyword, "while") == 0 || 
@@ -558,51 +574,71 @@ void map_custom_keyword_to_internal(char *line, char *output, char *custom_keywo
              strcmp(custom_keyword, "pendant") == 0) {
         snprintf(output, MAX_LINE, "mientras: %s", content);
     }
+    // Mots-clés de fonctions
     else if (strcmp(custom_keyword, "function") == 0 || 
              strcmp(custom_keyword, "func") == 0 ||
              strcmp(custom_keyword, "def") == 0 ||
-             strcmp(custom_keyword, "funcion") == 0) {
+             strcmp(custom_keyword, "funcion") == 0 ||
+             strcmp(custom_keyword, "fonction") == 0) {
         snprintf(output, MAX_LINE, "funcion: %s", content);
     }
     else if (strcmp(custom_keyword, "call") == 0 || 
              strcmp(custom_keyword, "invoke") == 0 ||
-             strcmp(custom_keyword, "llamar") == 0) {
+             strcmp(custom_keyword, "llamar") == 0 ||
+             strcmp(custom_keyword, "appeler") == 0 ||
+             strcmp(custom_keyword, "execute") == 0) {
         snprintf(output, MAX_LINE, "llamar: %s", content);
     }
+    // Mots-clés d'entrée
     else if (strcmp(custom_keyword, "input") == 0 || 
              strcmp(custom_keyword, "ask") == 0 ||
-             strcmp(custom_keyword, "entrada") == 0) {
+             strcmp(custom_keyword, "entrada") == 0 ||
+             strcmp(custom_keyword, "read") == 0 ||
+             strcmp(custom_keyword, "prompt") == 0) {
         snprintf(output, MAX_LINE, "entrada: %s", content);
     }
+    // Mots-clés aléatoires
     else if (strcmp(custom_keyword, "random") == 0 || 
-             strcmp(custom_keyword, "aleatorio") == 0) {
+             strcmp(custom_keyword, "aleatorio") == 0 ||
+             strcmp(custom_keyword, "rand") == 0) {
         snprintf(output, MAX_LINE, "aleatorio: %s", content);
     }
     else if (strcmp(custom_keyword, "random_real") == 0 || 
              strcmp(custom_keyword, "aleatorio_real") == 0) {
         snprintf(output, MAX_LINE, "aleatorio_real: %s", content);
     }
+    // Mots-clés de fichiers
     else if (strcmp(custom_keyword, "write_file") == 0 || 
-             strcmp(custom_keyword, "escribir_archivo") == 0) {
+             strcmp(custom_keyword, "escribir_archivo") == 0 ||
+             strcmp(custom_keyword, "save") == 0) {
         snprintf(output, MAX_LINE, "escribir_archivo: %s", content);
     }
     else if (strcmp(custom_keyword, "read_file") == 0 || 
-             strcmp(custom_keyword, "leer_archivo") == 0) {
+             strcmp(custom_keyword, "leer_archivo") == 0 ||
+             strcmp(custom_keyword, "load") == 0) {
         snprintf(output, MAX_LINE, "leer_archivo: %s", content);
     }
+    // Mots-clés de temps
     else if (strcmp(custom_keyword, "wait") == 0 || 
              strcmp(custom_keyword, "sleep") == 0 ||
-             strcmp(custom_keyword, "esperar") == 0) {
+             strcmp(custom_keyword, "esperar") == 0 ||
+             strcmp(custom_keyword, "pause") == 0) {
         snprintf(output, MAX_LINE, "esperar: %s", content);
     }
+    // Mots-clés de nettoyage
     else if (strcmp(custom_keyword, "clear") == 0 || 
              strcmp(custom_keyword, "cls") == 0 ||
              strcmp(custom_keyword, "limpiar_pantalla") == 0) {
         snprintf(output, MAX_LINE, "limpiar_pantalla");
     }
     else {
-        // Pour les mots-clés non mappés, traiter comme affichage
+        // Pour TOUS les autres mots-clés personnalisés, les traiter comme des commandes d'affichage
+        // Cela permet aux utilisateurs d'utiliser N'IMPORTE QUEL mot-clé pour afficher du contenu
         snprintf(output, MAX_LINE, "mostrar: %s", content);
+        
+        if (debug_mode) {
+            printf("[DEBUG] Mot-clé personnalisé '%s' mappé vers 'mostrar'\n", custom_keyword);
+        }
     }
 }
 
@@ -1204,6 +1240,11 @@ void execute_custom_language(char *lilou_file, char *code_file) {
                         // Mapear palabra clave personalizada a comando interno
                         char mapped_line[MAX_LINE];
                         map_custom_keyword_to_internal(line, mapped_line, current_lang.keywords[i]);
+                        
+                        if (debug_mode) {
+                            printf("[DEBUG] Mapeando '%s' -> '%s'\n", line, mapped_line);
+                        }
+                        
                         parse_lilou_definition(mapped_line);
                         found = 1;
                         break;
@@ -1211,12 +1252,38 @@ void execute_custom_language(char *lilou_file, char *code_file) {
                 }
             }
 
+            // Si toujours pas trouvé, vérifier si c'est un mot-clé avec ':' quelconque
             if (!found && strlen(line) > 0 && line[0] != '/' && line[0] != '#') {
-                if (current_lang.strict_mode) {
-                    printf("Error en línea %d: %s: '%s'\n", line_number, current_lang.error_messages[0], line);
-                } else {
-                    if (debug_mode) {
-                        printf("[DEBUG] Comando ignorado: %s\n", line);
+                char *colon_pos = strchr(line, ':');
+                if (colon_pos) {
+                    // Extraire le mot-clé avant ':'
+                    char potential_keyword[MAX_TOKEN];
+                    int keyword_len = colon_pos - line;
+                    if (keyword_len > 0 && keyword_len < MAX_TOKEN) {
+                        strncpy(potential_keyword, line, keyword_len);
+                        potential_keyword[keyword_len] = '\0';
+                        trim_whitespace(potential_keyword);
+                        
+                        // Traiter comme mot-clé personnalisé générique
+                        char mapped_line[MAX_LINE];
+                        map_custom_keyword_to_internal(line, mapped_line, potential_keyword);
+                        
+                        if (debug_mode) {
+                            printf("[DEBUG] Mot-clé générique détecté '%s' -> '%s'\n", line, mapped_line);
+                        }
+                        
+                        parse_lilou_definition(mapped_line);
+                        found = 1;
+                    }
+                }
+                
+                if (!found) {
+                    if (current_lang.strict_mode) {
+                        printf("Error en línea %d: %s: '%s'\n", line_number, current_lang.error_messages[0], line);
+                    } else {
+                        if (debug_mode) {
+                            printf("[DEBUG] Comando ignorado: %s\n", line);
+                        }
                     }
                 }
             }
