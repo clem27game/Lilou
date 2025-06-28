@@ -1,42 +1,93 @@
 
-// Histoire améliorée de Marius le chien sourd avec variables fonctionnelles
+// Histoire ultra-avancée de Marius le chien sourd avec toutes les nouvelles fonctionnalités
 
-SOURD: Marius est un chien adorable mais il est sourd!
-MAMA: Coucou tout le monde, je suis la mama de Marius
-coucou: Marius dit bonjour avec sa queue qui remue!
+SOURD: === L'AVENTURE MATHÉMATIQUE DE MARIUS LE CHIEN SOURD ===
+MAMA: Coucou tout le monde, je suis la mama de Marius!
 
-// Définition correcte des variables avec le bon format
-croquettes: croquettes = 10
-poulet: poulet = 5
-MAMA: MAMA = 3
+// Utilisation des variables prédéfinies dans Lilou
+SOURD: Marius a {age_marius} ans et pèse {poids_marius} kg
+coucou: C'est un magnifique {race_marius} de couleur {couleur_pelage}
+Waouf: Est-il sourd? {est_sourd} (1=oui, 0=non)
 
-// Les variables fonctionnent maintenant correctement!
-SOURD: Marius a {croquettes} croquettes dans sa gamelle
-Waouf: Et il a aussi {poulet} morceaux de poulet délicieux!
+// Variables locales avec calculs mathématiques avancés
+croquettes: nb_croquettes = 15
+poulet: nb_poulet = 8
+MAMA: factorielle_age = factorial({age_marius})
+SOURD: Factorielle de l'âge de Marius: {factorielle_age}
 
-// Calculs avec variables - calculs fonctionnels
-MAMA: Calcul du total de nourriture
-croquettes: {croquettes} + {poulet} = {croquettes + poulet} portions
+// Fonctions trigonométriques pour s'amuser
+coucou: angle_oreille = 45
+Waouf: sinus_oreille = sin({angle_oreille})
+MAMA: La projection de son oreille: {sinus_oreille}
 
-// Calculer le total correctement
-poulet: total = {croquettes + poulet}
-SOURD: Maintenant Marius a {total} portions au total!
+// Calculs de nourriture avec fonctions avancées  
+poulet: total_nourriture = {nb_croquettes + nb_poulet}
+SOURD: racine_nourriture = sqrt({total_nourriture})
+croquettes: nourriture_arrondie = round({racine_nourriture})
 
-// Test des nouvelles fonctionnalités
-coucou: Age de Marius en années 
-croquettes: age_humain = {MAMA * 2}
-SOURD: Marius a {age_humain} ans en âge humain!
+// Structures conditionnelles personnalisées
+si_marius: {age_marius} > 5 and {poids_marius} > 20
+alors_marius: MAMA: Marius est un grand chien adulte!
+alors_marius: coucou: Il peut manger {total_nourriture} portions
+sinon_marius: Waouf: Marius est encore un jeune chien
 
-// Messages avec émotions
-Waouf: Marius est heureux avec {total} portions de nourriture
-MAMA: Il remue la queue {age_humain} fois par minute quand il est content
-coucou: Même sourd, il apporte tant de joie à la famille!
+// Test de conditions avec les variables prédéfinies
+si_marius: {est_sourd} == 1
+alors_marius: SOURD: Effectivement, Marius est sourd mais très intelligent!
+alors_marius: poulet: Il compense avec ses autres sens
+sinon_marius: MAMA: Marius entend très bien
 
-// Histoire finale
-poulet: Marius dort paisiblement après son repas
-SOURD: Il rêve sûrement de {croquettes} nouveaux jouets
-MAMA: Fin de l'histoire de notre cher Marius ❤️
+// Boucle pour compter les câlins quotidiens
+MAMA: Comptons les câlins de Marius aujourd'hui:
+pour_marius: 5
+hacer: SOURD: Câlin numéro {i + 1} - Marius remue la queue!
+       coucou: Son bonheur level: {(i + 1) * 20}%
 
-// Test debug
-Waouf: Variables utilisées dans cette histoire
-coucou: croquettes={croquettes}, poulet={poulet}, total={total}, age_humain={age_humain}
+// Calculs de portions avec les constantes définies
+Waouf: Portions par jour définies: {portions_par_jour}
+MAMA: portion_size = {total_nourriture / portions_par_jour}
+poulet: Taille de chaque portion: {portion_size} croquettes
+
+// Fonctions de puissance pour calculer l'énergie
+croquettes: energie_par_portion = pow(2, {portion_size})
+SOURD: Énergie générée par portion: {energie_par_portion} kilojoules
+
+// Nombres aléatoires pour les jeux
+MAMA: Générons un nombre de jouets aléatoire pour Marius:
+coucou: random_jouets = random(10)
+Waouf: Marius aura {random_jouets} nouveaux jouets!
+
+// Calcul de l'aire de sa niche circulaire
+poulet: rayon_niche = 1.5
+SOURD: aire_niche = {pi * rayon_niche ** 2}
+MAMA: L'aire de la niche de Marius: {aire_niche} mètres carrés
+
+// Boucle tant que pour les promenades
+coucou: pas_aujourd_hui = 0
+tant_que: {pas_aujourd_hui} < 1000  
+hacer: Waouf: Marius fait le pas numéro {pas_aujourd_hui + 1}
+       poulet: pas_aujourd_hui = {pas_aujourd_hui + 100}
+       si_marius: {pas_aujourd_hui} >= 500
+       alors_marius: SOURD: Marius commence à être fatigué
+       alors_marius: break
+
+// Calculs d'âge avec logarithmes
+MAMA: age_logarithmique = log({age_marius})
+coucou: Âge logarithmique de Marius: {age_logarithmique}
+
+// Fonctions de comparaison
+poulet: age_max_compare = max({age_marius}, 10)
+SOURD: L'âge maximal entre Marius et 10 ans: {age_max_compare}
+
+// Histoire finale avec toutes les variables
+Waouf: === RÉSUMÉ DE L'AVENTURE DE MARIUS ===
+MAMA: Age: {age_marius} ans, Poids: {poids_marius} kg  
+coucou: Total nourriture: {total_nourriture}, Énergie: {energie_par_portion}
+poulet: Aire niche: {aire_niche} m², Pas effectués: {pas_aujourd_hui}
+SOURD: Fonctions utilisées: factorielle, sinus, racine, logarithme, puissance
+MAMA: Marius a vécu une journée pleine de mathématiques! ❤️🐕
+
+// Debug des nouvelles fonctionnalités
+coucou: Variables globales: age_marius={age_marius}, poids_marius={poids_marius}
+Waouf: Variables locales: nb_croquettes={nb_croquettes}, total_nourriture={total_nourriture}
+SOURD: Constantes: pi={pi}, portions_par_jour={portions_par_jour}

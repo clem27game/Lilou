@@ -4,8 +4,26 @@ Lilou programa - lenguaje de programación : MariusLeChien
 
 • Nombre del idioma: MariusLeChien
 • extension: .mama
-• operadores: =, <, >, -, +, /, \, •
-• palabras clave: SOURD, MAMA, Waouf, coucou, croquettes, poulet
+• operadores: =, <, >, -, +, /, \, •, **, %, ==, !=, <=, >=, and, or
+• palabras clave: SOURD, MAMA, Waouf, coucou, croquettes, poulet, si_marius, alors_marius, sinon_marius, tant_que, pour_marius
 • mensaje de error: Marius/mama na pas aimé ton code! Il a boudé
 • prefijo de salida: [MariusLeChien] 
+
+// === DÉFINITIONS PERSONNALISÉES POUR MARIUS ===
+definir_variable: age_marius = 7
+definir_variable: poids_marius = 25.5
+definir_variable: race_marius = "Berger Allemand"
+definir_variable: est_sourd = 1
+definir_variable: couleur_pelage = "noir et feu"
+
+definir_constante: pi
+definir_constante: taille_gamelle_standard = 2.5
+definir_constante: portions_par_jour = 3
+
+definir_estructura_si: Utilizar 'si_marius:' para condiciones sobre Marius
+definir_estructura_mientras: Utilizar 'tant_que:' para bucles con Marius  
+definir_estructura_repetir: Utilizar 'pour_marius:' para repetir acciones
+
+definir_funcion_matematica: sin, cos, sqrt, abs, factorial, random
+definir_tipos_datos: números decimales, strings para nombres, arrays para listas 
 

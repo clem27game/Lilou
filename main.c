@@ -235,16 +235,43 @@ double safe_division(double a, double b) {
 }
 
 double evaluate_math_function(char *func_name, double arg) {
-    if (strcmp(func_name, "sin") == 0) return sin(arg);
-    if (strcmp(func_name, "cos") == 0) return cos(arg);
-    if (strcmp(func_name, "tan") == 0) return tan(arg);
+    // Funciones trigonométricas
+    if (strcmp(func_name, "sin") == 0) return sin(arg * M_PI / 180.0); // Grados a radianes
+    if (strcmp(func_name, "cos") == 0) return cos(arg * M_PI / 180.0);
+    if (strcmp(func_name, "tan") == 0) return tan(arg * M_PI / 180.0);
+    if (strcmp(func_name, "asin") == 0) return asin(arg) * 180.0 / M_PI; // Radianes a grados
+    if (strcmp(func_name, "acos") == 0) return acos(arg) * 180.0 / M_PI;
+    if (strcmp(func_name, "atan") == 0) return atan(arg) * 180.0 / M_PI;
+    
+    // Funciones logarítmicas y exponenciales
     if (strcmp(func_name, "sqrt") == 0) return arg >= 0 ? sqrt(arg) : 0;
+    if (strcmp(func_name, "log") == 0) return arg > 0 ? log(arg) : 0; // Logaritmo natural
+    if (strcmp(func_name, "log10") == 0) return arg > 0 ? log10(arg) : 0; // Logaritmo base 10
+    if (strcmp(func_name, "exp") == 0) return exp(arg);
+    if (strcmp(func_name, "pow2") == 0) return pow(2, arg); // 2^x
+    if (strcmp(func_name, "pow10") == 0) return pow(10, arg); // 10^x
+    
+    // Funciones de redondeo y valor absoluto
     if (strcmp(func_name, "abs") == 0) return fabs(arg);
     if (strcmp(func_name, "floor") == 0) return floor(arg);
     if (strcmp(func_name, "ceil") == 0) return ceil(arg);
     if (strcmp(func_name, "round") == 0) return round(arg);
-    if (strcmp(func_name, "log") == 0) return arg > 0 ? log(arg) : 0;
-    if (strcmp(func_name, "exp") == 0) return exp(arg);
+    if (strcmp(func_name, "trunc") == 0) return trunc(arg);
+    
+    // Funciones hiperbólicas
+    if (strcmp(func_name, "sinh") == 0) return sinh(arg);
+    if (strcmp(func_name, "cosh") == 0) return cosh(arg);
+    if (strcmp(func_name, "tanh") == 0) return tanh(arg);
+    
+    // Funciones de utilidad
+    if (strcmp(func_name, "factorial") == 0) {
+        if (arg < 0 || arg != (int)arg) return 0;
+        double result = 1;
+        for (int i = 1; i <= (int)arg; i++) result *= i;
+        return result;
+    }
+    if (strcmp(func_name, "random") == 0) return ((double)rand() / RAND_MAX) * arg;
+    
     return 0;
 }
 
@@ -360,7 +387,7 @@ double evaluate_expression(char *expr) {
         return num_val;
     }
 
-    // Fonctions mathématiques
+    // Fonctions mathématiques avec un ou deux arguments
     if (strchr(expr, '(') && strchr(expr, ')')) {
         char func_name[MAX_TOKEN];
         char *paren_start = strchr(expr, '(');
@@ -379,8 +406,36 @@ double evaluate_expression(char *expr) {
                     strncpy(arg_str, paren_start + 1, arg_len);
                     arg_str[arg_len] = '\0';
 
-                    double arg = evaluate_expression(arg_str);
-                    return evaluate_math_function(func_name, arg);
+                    // Vérifier s'il y a deux arguments séparés par une virgule
+                    char *comma_pos = strchr(arg_str, ',');
+                    if (comma_pos) {
+                        char arg1_str[MAX_TOKEN], arg2_str[MAX_TOKEN];
+                        int arg1_len = comma_pos - arg_str;
+                        strncpy(arg1_str, arg_str, arg1_len);
+                        arg1_str[arg1_len] = '\0';
+                        trim_whitespace(arg1_str);
+                        
+                        strcpy(arg2_str, comma_pos + 1);
+                        trim_whitespace(arg2_str);
+                        
+                        double arg1 = evaluate_expression(arg1_str);
+                        double arg2 = evaluate_expression(arg2_str);
+                        
+                        // Fonctions à deux arguments
+                        if (strcmp(func_name, "pow") == 0) return pow(arg1, arg2);
+                        if (strcmp(func_name, "atan2") == 0) return atan2(arg1, arg2) * 180.0 / M_PI;
+                        if (strcmp(func_name, "mod") == 0) return fmod(arg1, arg2);
+                        if (strcmp(func_name, "max") == 0) return fmax(arg1, arg2);
+                        if (strcmp(func_name, "min") == 0) return fmin(arg1, arg2);
+                        if (strcmp(func_name, "hypot") == 0) return hypot(arg1, arg2);
+                        
+                        // Si ce n'est pas une fonction à deux arguments, utiliser le premier
+                        return evaluate_math_function(func_name, arg1);
+                    } else {
+                        // Fonction à un seul argument
+                        double arg = evaluate_expression(arg_str);
+                        return evaluate_math_function(func_name, arg);
+                    }
                 }
             }
         }
@@ -933,6 +988,98 @@ void parse_lilou_definition(char *line) {
         }
         printf("Palabras clave definidas: %d\n", current_lang.keyword_count);
     }
+    // Nuevas definiciones personalizables en Lilou
+    else if (strstr(line, "definir_variable:")) {
+        char *var_def = strchr(line, ':') + 1;
+        trim_whitespace(var_def);
+        char var_copy[MAX_LINE];
+        strcpy(var_copy, var_def);
+        
+        char *equal_pos = strchr(var_copy, '=');
+        if (equal_pos) {
+            char var_name[MAX_TOKEN];
+            int name_len = equal_pos - var_copy;
+            strncpy(var_name, var_copy, name_len);
+            var_name[name_len] = '\0';
+            trim_whitespace(var_name);
+            
+            char *value_str = equal_pos + 1;
+            trim_whitespace(value_str);
+            
+            if ((value_str[0] == '"' && value_str[strlen(value_str)-1] == '"') ||
+                (value_str[0] == '\'' && value_str[strlen(value_str)-1] == '\'')) {
+                char string_val[MAX_LINE];
+                int str_len = strlen(value_str) - 2;
+                strncpy(string_val, value_str + 1, str_len);
+                string_val[str_len] = '\0';
+                set_variable(var_name, 0, "string", string_val);
+                printf("Variable global '%s' definida como string: \"%s\"\n", var_name, string_val);
+            } else {
+                double value = evaluate_expression(value_str);
+                set_variable(var_name, value, "number", NULL);
+                printf("Variable global '%s' definida como número: %.6g\n", var_name, value);
+            }
+        }
+    }
+    else if (strstr(line, "definir_constante:")) {
+        char *const_def = strchr(line, ':') + 1;
+        trim_whitespace(const_def);
+        
+        if (strstr(const_def, "pi")) {
+            set_variable("pi", 3.14159265359, "number", NULL);
+            printf("Constante matemática 'pi' definida globalmente\n");
+        } else if (strstr(const_def, "euler")) {
+            set_variable("e", 2.71828182846, "number", NULL);
+            printf("Constante matemática 'e' (Euler) definida globalmente\n");
+        } else {
+            char const_copy[MAX_LINE];
+            strcpy(const_copy, const_def);
+            char *equal_pos = strchr(const_copy, '=');
+            if (equal_pos) {
+                char const_name[MAX_TOKEN];
+                int name_len = equal_pos - const_copy;
+                strncpy(const_name, const_copy, name_len);
+                const_name[name_len] = '\0';
+                trim_whitespace(const_name);
+                
+                char *value_str = equal_pos + 1;
+                trim_whitespace(value_str);
+                double value = evaluate_expression(value_str);
+                set_variable(const_name, value, "number", NULL);
+                printf("Constante '%s' definida globalmente: %.6g\n", const_name, value);
+            }
+        }
+    }
+    else if (strstr(line, "definir_estructura_si:")) {
+        char *struct_def = strchr(line, ':') + 1;
+        trim_whitespace(struct_def);
+        printf("Estructura condicional 'si' configurada: %s\n", struct_def);
+        // La lógica de 'si' ya está implementada, esto es para documentación
+    }
+    else if (strstr(line, "definir_estructura_mientras:")) {
+        char *struct_def = strchr(line, ':') + 1;
+        trim_whitespace(struct_def);
+        printf("Estructura de bucle 'mientras' configurada: %s\n", struct_def);
+        // La lógica de 'mientras' ya está implementada
+    }
+    else if (strstr(line, "definir_estructura_repetir:")) {
+        char *struct_def = strchr(line, ':') + 1;
+        trim_whitespace(struct_def);
+        printf("Estructura de bucle 'repetir' configurada: %s\n", struct_def);
+        // La lógica de 'repetir' ya está implementada
+    }
+    else if (strstr(line, "definir_funcion_matematica:")) {
+        char *func_def = strchr(line, ':') + 1;
+        trim_whitespace(func_def);
+        printf("Funciones matemáticas avanzadas habilitadas: %s\n", func_def);
+        printf("Disponibles: sin, cos, tan, sqrt, abs, floor, ceil, round, log, exp, pow\n");
+    }
+    else if (strstr(line, "definir_tipos_datos:")) {
+        char *types_def = strchr(line, ':') + 1;
+        trim_whitespace(types_def);
+        printf("Tipos de datos configurados: %s\n", types_def);
+        printf("Soportados: números decimales, strings, arrays, booleanos\n");
+    }
     // Comandos de ejecución
     else if (strstr(line, "mostrar:")) {
         char *msg_start = strchr(line, ':') + 1;
@@ -1095,15 +1242,20 @@ void parse_lilou_definition(char *line) {
     else if (strstr(line, "mientras:")) {
         char *condition_start = strchr(line, ':') + 1;
         trim_whitespace(condition_start);
-
-        while (evaluate_condition(condition_start) && !current_lang.break_flag) {
-            // Necesitaríamos el código del bucle, esto es una simplificación
-            if (debug_mode) {
-                printf("[DEBUG] Ejecutando bucle mientras: %s\n", condition_start);
-            }
-            break; // Evitar bucle infinito en esta implementación
-        }
+        
+        // Inicializar variables de bucle while
+        current_lang.loop_active = 1;
         current_lang.break_flag = 0;
+        current_lang.continue_flag = 0;
+        int while_iterations = 0;
+        const int MAX_WHILE_ITERATIONS = 10000; // Prevenir bucles infinitos
+        
+        if (debug_mode) {
+            printf("[DEBUG] Iniciando bucle mientras con condición: %s\n", condition_start);
+        }
+        
+        // Marcar que estamos en un bucle while para el próximo 'hacer:'
+        current_lang.loop_count = -1; // -1 indica bucle while
     }
     else if (strstr(line, "repetir:")) {
         char *repeat_start = strchr(line, ':') + 1;
@@ -1122,28 +1274,44 @@ void parse_lilou_definition(char *line) {
         char *do_start = strchr(line, ':') + 1;
         trim_whitespace(do_start);
 
-        while (current_lang.loop_count < current_lang.loop_max && !current_lang.break_flag) {
-            // Mettre à jour les variables de boucle
-            set_variable("i", current_lang.loop_count, "number", NULL);
-            set_variable("iteration", current_lang.loop_count + 1, "number", NULL);
-            current_lang.continue_flag = 0;
-
+        if (current_lang.loop_count == -1) {
+            // Bucle while - necesitamos obtener la condición del while anterior
+            // Para esta implementación simplificada, ejecutar una vez
             if (debug_mode) {
-                printf("[DEBUG] Boucle iteration %d/%d\n", current_lang.loop_count + 1, current_lang.loop_max);
+                printf("[DEBUG] Ejecutando cuerpo de bucle while\n");
             }
-
+            
+            set_variable("iteration", 1, "number", NULL);
+            current_lang.continue_flag = 0;
+            
             parse_lilou_definition(do_start);
+            
+        } else {
+            // Bucle for normal
+            while (current_lang.loop_count < current_lang.loop_max && !current_lang.break_flag) {
+                // Mettre à jour les variables de boucle
+                set_variable("i", current_lang.loop_count, "number", NULL);
+                set_variable("iteration", current_lang.loop_count + 1, "number", NULL);
+                current_lang.continue_flag = 0;
 
-            if (current_lang.continue_flag) {
+                if (debug_mode) {
+                    printf("[DEBUG] Boucle iteration %d/%d\n", current_lang.loop_count + 1, current_lang.loop_max);
+                }
+
+                parse_lilou_definition(do_start);
+
+                if (current_lang.continue_flag) {
+                    current_lang.loop_count++;
+                    continue;
+                }
+                if (current_lang.break_flag) {
+                    break;
+                }
+
                 current_lang.loop_count++;
-                continue;
             }
-            if (current_lang.break_flag) {
-                break;
-            }
-
-            current_lang.loop_count++;
         }
+        
         current_lang.loop_active = 0;
         current_lang.break_flag = 0;
         current_lang.continue_flag = 0;
