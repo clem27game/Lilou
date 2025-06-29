@@ -87,6 +87,9 @@ typedef struct {
     // Variables de entrada
     char last_input[MAX_LINE];
     double last_input_number;
+    
+    // Configuration pour les messages d'erreur drôles
+    char error_language[10]; // "fr" ou "es"
 } Language;
 
 Language current_lang;
@@ -103,6 +106,7 @@ void init_language() {
     current_lang.decimal_separator = '.';
     current_lang.max_recursion_depth = 100;
     current_lang.case_sensitive = 1;
+    strcpy(current_lang.error_language, "fr"); // Français par défaut
 
     // Mensajes de error mejorados
     strcpy(current_lang.error_messages[0], "Error: comando no reconocido");
@@ -1020,6 +1024,12 @@ void map_custom_keyword_to_internal(char *line, char *output, char *custom_keywo
              strcmp(custom_keyword, "limpiar_pantalla") == 0) {
         snprintf(output, MAX_LINE, "limpiar_pantalla");
     }
+    // Mots-clés d'algorithme
+    else if (strcmp(custom_keyword, "algorithm") == 0 || 
+             strcmp(custom_keyword, "algoritmo") == 0 ||
+             strcmp(custom_keyword, "calc_simple") == 0) {
+        snprintf(output, MAX_LINE, "algorithme: %s", content);
+    }
     else {
         // Pour TOUS les autres mots-clés personnalisés, les traiter comme des commandes d'affichage
         snprintf(output, MAX_LINE, "mostrar: %s", content);
@@ -1673,6 +1683,88 @@ void parse_lilou_definition(char *line) {
         #endif
         printf("%sPantalla limpiada\n", current_lang.output_prefix);
     }
+    else if (strstr(line, "algorithme:")) {
+        char *calc_start = strchr(line, ':') + 1;
+        trim_whitespace(calc_start);
+        
+        // Chercher l'opérateur dans l'expression
+        char operators[] = "+-*/";
+        char *op_pos = NULL;
+        char op_found = '\0';
+        
+        for (int i = 0; i < 4; i++) {
+            op_pos = strchr(calc_start, operators[i]);
+            if (op_pos && op_pos != calc_start) { // Pas au début pour éviter les nombres négatifs
+                op_found = operators[i];
+                break;
+            }
+        }
+        
+        if (op_pos && op_found) {
+            char left_str[MAX_TOKEN], right_str[MAX_TOKEN];
+            
+            // Extraire la partie gauche
+            int left_len = op_pos - calc_start;
+            strncpy(left_str, calc_start, left_len);
+            left_str[left_len] = '\0';
+            trim_whitespace(left_str);
+            
+            // Extraire la partie droite
+            strcpy(right_str, op_pos + 1);
+            trim_whitespace(right_str);
+            
+            if (strlen(left_str) > 0 && strlen(right_str) > 0) {
+                double left_val = evaluate_expression(left_str);
+                double right_val = evaluate_expression(right_str);
+                double result = 0;
+                
+                switch(op_found) {
+                    case '+': 
+                        result = left_val + right_val;
+                        printf("%s🧮 Algorithme: %.15g + %.15g = %.15g\n", 
+                               current_lang.output_prefix, left_val, right_val, result);
+                        break;
+                    case '-': 
+                        result = left_val - right_val;
+                        printf("%s🧮 Algorithme: %.15g - %.15g = %.15g\n", 
+                               current_lang.output_prefix, left_val, right_val, result);
+                        break;
+                    case '*': 
+                        result = left_val * right_val;
+                        printf("%s🧮 Algorithme: %.15g × %.15g = %.15g\n", 
+                               current_lang.output_prefix, left_val, right_val, result);
+                        break;
+                    case '/': 
+                        if (fabs(right_val) > 1e-10) {
+                            result = left_val / right_val;
+                            printf("%s🧮 Algorithme: %.15g ÷ %.15g = %.15g\n", 
+                                   current_lang.output_prefix, left_val, right_val, result);
+                        } else {
+                            printf("%s❌ Erreur: Division par zéro dans l'algorithme!\n", current_lang.output_prefix);
+                            result = 0;
+                        }
+                        break;
+                }
+                
+                // Sauvegarder le résultat dans une variable spéciale
+                set_variable("algorithme_resultat", result, "number", NULL);
+            } else {
+                printf("%s❌ Erreur: Expression algorithme invalide\n", current_lang.output_prefix);
+            }
+        } else {
+            printf("%s❌ Erreur: Opérateur manquant dans l'algorithme (utilisez +, -, *, /)\n", current_lang.output_prefix);
+        }
+    }
+    else if (strstr(line, "algorythme:")) {
+        // Message d'erreur drôle selon la langue configurée
+        if (strcmp(current_lang.error_language, "es") == 0) {
+            printf("🛑 ¡Nop! ¡No estamos en clase de música aquí! ¡Sin ritmo, señor desafinado!\n");
+            printf("💡 Pista: Quizás quisiste decir 'algorithme:' (sin la 'y' musical)\n");
+        } else {
+            printf("🛑 Nop! On est pas en cours de musique ici! Pas de rythme, monsieur le décalé!\n");
+            printf("💡 Indice: Tu voulais peut-être dire 'algorithme:' (sans le 'y' musical)\n");
+        }
+    }
     else if (strstr(line, "debug:")) {
         char *debug_cmd = strchr(line, ':') + 1;
         trim_whitespace(debug_cmd);
@@ -1726,6 +1818,14 @@ void parse_lilou_definition(char *line) {
         trim_whitespace(prefix_start);
         strcpy(current_lang.output_prefix, prefix_start);
     }
+    else if (strstr(line, "langage-error:") || strstr(line, "idioma-error:")) {
+        char *lang_start = strchr(line, ':') + 1;
+        trim_whitespace(lang_start);
+        if (strcmp(lang_start, "fr") == 0 || strcmp(lang_start, "es") == 0) {
+            strcpy(current_lang.error_language, lang_start);
+            printf("Idioma de errores configurado: %s\n", current_lang.error_language);
+        }
+    }
 }
 
 void execute_custom_language(char *lilou_file, char *code_file) {
@@ -1778,9 +1878,10 @@ void execute_custom_language(char *lilou_file, char *code_file) {
                 "mostrar:", "imprimir:", "calcular:", "variable:", "array:", "si:", "entonces:", "sino:",
                 "repetir:", "hacer:", "mientras:", "aleatorio:", "aleatorio_real:", "escribir_archivo:", 
                 "anexar_archivo:", "leer_archivo:", "funcion:", "llamar:", "retornar:", "entrada:", 
-                "esperar:", "limpiar_pantalla", "clear", "debug:", "break", "continue", "romper", "continuar"
+                "esperar:", "limpiar_pantalla", "clear", "debug:", "break", "continue", "romper", "continuar",
+                "algorithme:", "algorythme:"
             };
-            int predefined_count = 28;
+            int predefined_count = 30;
 
             int found = 0;
             for (int i = 0; i < predefined_count; i++) {
@@ -2010,6 +2111,7 @@ void show_help() {
     printf("  🎲 Números aleatorios corregidos\n");
     printf("  🔗 Llamadas de función con parámetros\n");
     printf("  🔄 Recursión controlada\n");
+    printf("  🎭 NUEVO: algorithme - Calculadora directa con blague!\n");
 
     printf("\n📖 Para más información, usa: ./main ejemplos\n");
 }
@@ -2057,6 +2159,15 @@ void show_examples() {
     printf("debug: funciones\n");
     printf("debug: arrays\n");
     printf("debug: off\n\n");
+
+    printf("🎭 8. ALGORITHME - CALCULADORA DIRECTA:\n");
+    printf("langage-error: fr\n");
+    printf("algorithme: 2 + 2\n");
+    printf("algorithme: 15 * 3\n");
+    printf("algorithme: 100 / 4\n");
+    printf("algorithme: 50 - 8\n");
+    printf("// Essaye ça pour la blague:\n");
+    printf("algorythme: 2 + 2\n\n");
 }
 
 void show_features() {

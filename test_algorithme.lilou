@@ -1,0 +1,12 @@
+
+Lilou programa - lenguaje de programación : TestAlgorithme
+
+• Nombre del idioma: AlgoLang
+• extension: .algo
+• modo_estricto: off
+• sensible_mayusculas: on
+• operadores: +, -, *, /, %, **, =, ==, !=, <, >, <=, >=, and, or
+• palabras clave: show, algorithme, algorythme
+• mensaje de error: Erreur dans AlgoLang
+• prefijo de salida: [AlgoLang] 
+• langage-error: fr

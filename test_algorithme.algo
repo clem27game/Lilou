@@ -1,0 +1,27 @@
+
+// Test de la fonctionnalité algorithme avec blagues
+
+show: === Test de la calculatrice algorithme ===
+
+// Tests basiques
+algorithme: 2 + 2
+algorithme: 6 + 6
+algorithme: 10 - 3
+algorithme: 5 * 7
+algorithme: 20 / 4
+
+// Tests avec des nombres décimaux
+algorithme: 15.5 + 4.2
+algorithme: 10.75 * 2
+
+// Test avec des variables
+variable: a = 8
+variable: b = 12
+algorithme: a + b
+
+show: === Maintenant testons la blague ===
+
+// La faute d'orthographe qui déclenche la blague
+algorythme: 2 + 2
+
+show: === Fin du test ===
