@@ -1,0 +1,71 @@
+
+// Test du nouveau langage TechLang avec toutes les fonctionnalités
+
+clear
+show: === 🚀 TEST COMPLET TECHLANG ===
+
+// Test des modules
+load: matematicas
+load: red  
+load: bd
+
+// Test networking avec conditions
+net: ping localhost
+check: ping_tiempo < 100
+show: ✅ Connexion rapide: {ping_tiempo}ms
+show: 🌐 Démarrage du serveur...
+net: servidor 5000
+
+// Test base de données avancée
+db: conectar app_test
+db: crear_tabla productos
+db: insertar "Laptop", 999.99, 10
+db: insertar "Mouse", 29.99, 50
+db: consultar SELECT * FROM productos
+show: 📊 Base de données: {bd_registros} produits, {bd_resultados} résultats
+
+// Test IA avec cryptographie
+ai: prediccion tendencias_mercado
+crypto: hash "prediction_data_{ia_prediccion}"
+show: 🤖 Prédiction sécurisée: {ia_prediccion}% (Hash: {crypto_hash})
+
+// Test GUI interactif
+gui: ventana "Centre de Contrôle TechLang"
+gui: boton "Scanner Capteurs"
+gui: boton "Analyser Données"
+gui: menu "Capteurs, Analyse, Crypto, Réseau"
+
+// Test capteurs avec analyse
+sensor: temperatura
+sensor: humedad
+sensor: luz
+sensor: movimiento
+
+// Analyse des données capteurs
+data: estadisticas capteurs_ambientaux
+show: 📈 Analyse environnementale:
+show: 🌡️ T°: {sensor_temperatura}°C | 💧 H: {sensor_humedad}%
+show: ☀️ Lumière: {sensor_luz} | 🚶 Mouvement: {sensor_movimiento}
+show: 📊 Moyennes calculées: {stats_media}
+
+// Génération automatique de rapport
+crypto: generar_clave
+ai: generar_texto "rapport automatique capteurs IoT"
+show: 🔐 Rapport sécurisé généré avec clé: {crypto_clave}
+
+// Jeu interactif basé sur les données
+game: adivinanza {sensor_temperatura}
+show: 🎯 Devine le nombre secret basé sur la température!
+show: 💡 Indice: Entre 1 et {sensor_temperatura}
+
+// Conditions complexes multi-modules
+check: (sensor_temperatura > 20) and (bd_registros > 0) and (ping_tiempo < 50)
+show: ✅ Tous les systèmes opérationnels!
+
+// Graphique final
+data: grafico lineas
+show: 📈 Visualisation des données générée
+
+show: === 🎉 TEST TECHLANG RÉUSSI! ===
+show: 🔧 Modules actifs | 🌐 Réseau OK | 🗄️ BD OK
+show: 🤖 IA OK | 🔐 Crypto OK | 🌡️ Capteurs OK | 📊 Analyse OK

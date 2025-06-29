@@ -1122,6 +1122,54 @@ void map_custom_keyword_to_internal(char *line, char *output, char *custom_keywo
              strcmp(custom_keyword, "jugar") == 0) {
         snprintf(output, MAX_LINE, "juego: %s", content);
     }
+    // Nouveaux mots-clés de modules
+    else if (strcmp(custom_keyword, "module") == 0 || 
+             strcmp(custom_keyword, "modulo") == 0 ||
+             strcmp(custom_keyword, "load") == 0) {
+        snprintf(output, MAX_LINE, "modulo: %s", content);
+    }
+    // Mots-clés de réseau
+    else if (strcmp(custom_keyword, "network") == 0 || 
+             strcmp(custom_keyword, "net") == 0 ||
+             strcmp(custom_keyword, "red") == 0) {
+        snprintf(output, MAX_LINE, "red: %s", content);
+    }
+    // Mots-clés de base de données
+    else if (strcmp(custom_keyword, "database") == 0 || 
+             strcmp(custom_keyword, "db") == 0 ||
+             strcmp(custom_keyword, "bd") == 0) {
+        snprintf(output, MAX_LINE, "bd: %s", content);
+    }
+    // Mots-clés de GUI
+    else if (strcmp(custom_keyword, "gui") == 0 || 
+             strcmp(custom_keyword, "interface") == 0 ||
+             strcmp(custom_keyword, "window") == 0) {
+        snprintf(output, MAX_LINE, "gui: %s", content);
+    }
+    // Mots-clés d'IA
+    else if (strcmp(custom_keyword, "ai") == 0 || 
+             strcmp(custom_keyword, "ia") == 0 ||
+             strcmp(custom_keyword, "intelligence") == 0) {
+        snprintf(output, MAX_LINE, "ia: %s", content);
+    }
+    // Mots-clés de cryptographie
+    else if (strcmp(custom_keyword, "crypto") == 0 || 
+             strcmp(custom_keyword, "crypt") == 0 ||
+             strcmp(custom_keyword, "encrypt") == 0) {
+        snprintf(output, MAX_LINE, "crypto: %s", content);
+    }
+    // Mots-clés de capteurs
+    else if (strcmp(custom_keyword, "sensor") == 0 || 
+             strcmp(custom_keyword, "capteur") == 0 ||
+             strcmp(custom_keyword, "detect") == 0) {
+        snprintf(output, MAX_LINE, "sensor: %s", content);
+    }
+    // Mots-clés d'analyse de données
+    else if (strcmp(custom_keyword, "data") == 0 || 
+             strcmp(custom_keyword, "datos") == 0 ||
+             strcmp(custom_keyword, "analyse") == 0) {
+        snprintf(output, MAX_LINE, "datos: %s", content);
+    }
     else {
         // Pour TOUS les autres mots-clés personnalisés, les traiter comme des commandes d'affichage
         snprintf(output, MAX_LINE, "mostrar: %s", content);
@@ -2031,6 +2079,264 @@ void parse_lilou_definition(char *line) {
             printf("%s🃏 Carta extraída: %s%s\n", current_lang.output_prefix, valores[valor], palos[palo]);
             set_variable("carta_valor", valor + 1, "number", NULL);
             set_variable("carta_palo", palo, "number", NULL);
+        } else if (strstr(game_cmd, "adivinanza")) {
+            char *range_str = strstr(game_cmd, "adivinanza") + 10;
+            trim_whitespace(range_str);
+            int max_num = 100;
+            if (strlen(range_str) > 0) {
+                max_num = (int)evaluate_expression(range_str);
+            }
+            int numero_secreto = 1 + rand() % max_num;
+            set_variable("numero_secreto", numero_secreto, "number", NULL);
+            printf("%s🎯 Número secreto generado entre 1 y %d. ¡Adivínalo!\n", current_lang.output_prefix, max_num);
+        }
+    }
+    // NUEVAS FUNCIONALIDADES: SISTEMA DE MÓDULOS
+    else if (strstr(line, "modulo:")) {
+        char *module_cmd = strchr(line, ':') + 1;
+        trim_whitespace(module_cmd);
+
+        if (strstr(module_cmd, "matematicas")) {
+            printf("%s📐 Módulo Matemáticas cargado - Funciones avanzadas disponibles\n", current_lang.output_prefix);
+            set_variable("modulo_matematicas", 1, "number", NULL);
+        } else if (strstr(module_cmd, "sistema")) {
+            printf("%s💻 Módulo Sistema cargado - Comandos del SO disponibles\n", current_lang.output_prefix);
+            set_variable("modulo_sistema", 1, "number", NULL);
+        } else if (strstr(module_cmd, "red") || strstr(module_cmd, "network")) {
+            printf("%s🌐 Módulo Red cargado - Funciones de networking disponibles\n", current_lang.output_prefix);
+            set_variable("modulo_red", 1, "number", NULL);
+        } else if (strstr(module_cmd, "bd") || strstr(module_cmd, "database")) {
+            printf("%s🗄️ Módulo Base de Datos cargado - Funciones SQL disponibles\n", current_lang.output_prefix);
+            set_variable("modulo_bd", 1, "number", NULL);
+        } else if (strstr(module_cmd, "gui") || strstr(module_cmd, "interfaz")) {
+            printf("%s🖼️ Módulo GUI cargado - Interfaces gráficas disponibles\n", current_lang.output_prefix);
+            set_variable("modulo_gui", 1, "number", NULL);
+        }
+    }
+    // SISTEMA DE NETWORKING
+    else if (strstr(line, "red:")) {
+        char *net_cmd = strchr(line, ':') + 1;
+        trim_whitespace(net_cmd);
+
+        if (strstr(net_cmd, "ping")) {
+            char *host = strstr(net_cmd, "ping") + 5;
+            trim_whitespace(host);
+            printf("%s🌐 Haciendo ping a %s...\n", current_lang.output_prefix, host);
+            // Simulación de ping
+            int tiempo = 10 + rand() % 90;
+            set_variable("ping_tiempo", tiempo, "number", NULL);
+            printf("%s📡 Respuesta de %s: tiempo=%dms\n", current_lang.output_prefix, host, tiempo);
+        } else if (strstr(net_cmd, "descargar")) {
+            char *url = strstr(net_cmd, "descargar") + 10;
+            trim_whitespace(url);
+            printf("%s⬇️ Descargando desde %s...\n", current_lang.output_prefix, url);
+            // Simulación de descarga
+            int progreso = 0;
+            for (int i = 0; i <= 100; i += 20) {
+                printf("%s📊 Progreso: %d%%\n", current_lang.output_prefix, i);
+                usleep(200000); // 0.2 segundos
+            }
+            set_variable("descarga_completa", 1, "number", NULL);
+            printf("%s✅ Descarga completada\n", current_lang.output_prefix);
+        } else if (strstr(net_cmd, "servidor")) {
+            char *puerto_str = strstr(net_cmd, "servidor") + 9;
+            trim_whitespace(puerto_str);
+            int puerto = 8080;
+            if (strlen(puerto_str) > 0) {
+                puerto = (int)evaluate_expression(puerto_str);
+            }
+            printf("%s🖥️ Servidor iniciado en puerto %d\n", current_lang.output_prefix, puerto);
+            set_variable("servidor_puerto", puerto, "number", NULL);
+            set_variable("servidor_activo", 1, "number", NULL);
+        }
+    }
+    // SISTEMA DE BASE DE DATOS
+    else if (strstr(line, "bd:")) {
+        char *db_cmd = strchr(line, ':') + 1;
+        trim_whitespace(db_cmd);
+
+        if (strstr(db_cmd, "conectar")) {
+            char *db_name = strstr(db_cmd, "conectar") + 9;
+            trim_whitespace(db_name);
+            printf("%s🗄️ Conectando a base de datos '%s'...\n", current_lang.output_prefix, db_name);
+            set_variable("bd_conectada", 1, "number", NULL);
+            set_variable("bd_nombre", 0, "string", db_name);
+            printf("%s✅ Conexión establecida\n", current_lang.output_prefix);
+        } else if (strstr(db_cmd, "crear_tabla")) {
+            char *tabla = strstr(db_cmd, "crear_tabla") + 12;
+            trim_whitespace(tabla);
+            printf("%s📋 Creando tabla '%s'...\n", current_lang.output_prefix, tabla);
+            set_variable("ultima_tabla", 0, "string", tabla);
+            printf("%s✅ Tabla creada exitosamente\n", current_lang.output_prefix);
+        } else if (strstr(db_cmd, "insertar")) {
+            char *datos = strstr(db_cmd, "insertar") + 9;
+            trim_whitespace(datos);
+            printf("%s➕ Insertando datos: %s\n", current_lang.output_prefix, datos);
+            int registros = get_variable_value("bd_registros") + 1;
+            set_variable("bd_registros", registros, "number", NULL);
+            printf("%s✅ Registro insertado. Total: %d\n", current_lang.output_prefix, registros);
+        } else if (strstr(db_cmd, "consultar")) {
+            char *query = strstr(db_cmd, "consultar") + 10;
+            trim_whitespace(query);
+            printf("%s🔍 Ejecutando consulta: %s\n", current_lang.output_prefix, query);
+            int resultados = 1 + rand() % 10;
+            set_variable("bd_resultados", resultados, "number", NULL);
+            printf("%s📊 Consulta completada. %d resultados encontrados\n", current_lang.output_prefix, resultados);
+        }
+    }
+    // SISTEMA DE GUI
+    else if (strstr(line, "gui:")) {
+        char *gui_cmd = strchr(line, ':') + 1;
+        trim_whitespace(gui_cmd);
+
+        if (strstr(gui_cmd, "ventana")) {
+            char *titulo = strstr(gui_cmd, "ventana") + 8;
+            trim_whitespace(titulo);
+            printf("%s🖼️ Creando ventana: %s\n", current_lang.output_prefix, titulo);
+            set_variable("gui_ventana_activa", 1, "number", NULL);
+            printf("%s┌─────────────────────────────┐\n", current_lang.output_prefix);
+            printf("%s│ %s│\n", current_lang.output_prefix, titulo);
+            printf("%s├─────────────────────────────┤\n", current_lang.output_prefix);
+            printf("%s│                             │\n", current_lang.output_prefix);
+            printf("%s│        [Contenido GUI]      │\n", current_lang.output_prefix);
+            printf("%s│                             │\n", current_lang.output_prefix);
+            printf("%s└─────────────────────────────┘\n", current_lang.output_prefix);
+        } else if (strstr(gui_cmd, "boton")) {
+            char *texto_boton = strstr(gui_cmd, "boton") + 6;
+            trim_whitespace(texto_boton);
+            printf("%s🔘 Botón creado: [%s]\n", current_lang.output_prefix, texto_boton);
+            set_variable("gui_ultimo_boton", 0, "string", texto_boton);
+        } else if (strstr(gui_cmd, "menu")) {
+            char *opciones = strstr(gui_cmd, "menu") + 5;
+            trim_whitespace(opciones);
+            printf("%s📋 Menú creado con opciones: %s\n", current_lang.output_prefix, opciones);
+            printf("%s┌─ MENÚ ─────────────────────┐\n", current_lang.output_prefix);
+            printf("%s│ 1. Opción A                │\n", current_lang.output_prefix);
+            printf("%s│ 2. Opción B                │\n", current_lang.output_prefix);
+            printf("%s│ 3. Salir                   │\n", current_lang.output_prefix);
+            printf("%s└────────────────────────────┘\n", current_lang.output_prefix);
+        }
+    }
+    // SISTEMA DE INTELIGENCIA ARTIFICIAL
+    else if (strstr(line, "ia:")) {
+        char *ai_cmd = strchr(line, ':') + 1;
+        trim_whitespace(ai_cmd);
+
+        if (strstr(ai_cmd, "prediccion")) {
+            char *datos = strstr(ai_cmd, "prediccion") + 11;
+            trim_whitespace(datos);
+            printf("%s🤖 Analizando datos para predicción...\n", current_lang.output_prefix);
+            double prediccion = 50.0 + (rand() % 100) / 2.0;
+            set_variable("ia_prediccion", prediccion, "number", NULL);
+            printf("%s🎯 Predicción IA: %.2f%% de probabilidad\n", current_lang.output_prefix, prediccion);
+        } else if (strstr(ai_cmd, "clasificar")) {
+            char *input = strstr(ai_cmd, "clasificar") + 11;
+            trim_whitespace(input);
+            printf("%s🧠 Clasificando entrada: %s\n", current_lang.output_prefix, input);
+            char *categorias[] = {"Positivo", "Negativo", "Neutro", "Urgente", "Normal"};
+            int categoria = rand() % 5;
+            printf("%s📊 Clasificación: %s\n", current_lang.output_prefix, categorias[categoria]);
+            set_variable("ia_categoria", categoria, "number", NULL);
+        } else if (strstr(ai_cmd, "generar_texto")) {
+            char *tema = strstr(ai_cmd, "generar_texto") + 14;
+            trim_whitespace(tema);
+            printf("%s✍️ Generando texto sobre: %s\n", current_lang.output_prefix, tema);
+            printf("%s📝 Texto generado: 'Este es un texto generado automáticamente sobre %s'\n", current_lang.output_prefix, tema);
+            set_variable("ia_texto_generado", 1, "number", NULL);
+        }
+    }
+    // SISTEMA DE CRIPTOGRAFÍA
+    else if (strstr(line, "crypto:")) {
+        char *crypto_cmd = strchr(line, ':') + 1;
+        trim_whitespace(crypto_cmd);
+
+        if (strstr(crypto_cmd, "hash")) {
+            char *texto = strstr(crypto_cmd, "hash") + 5;
+            trim_whitespace(texto);
+            printf("%s🔐 Calculando hash de: %s\n", current_lang.output_prefix, texto);
+            // Simulación de hash
+            unsigned long hash = 5381;
+            for (int i = 0; texto[i]; i++) {
+                hash = ((hash << 5) + hash) + texto[i];
+            }
+            set_variable("crypto_hash", hash % 1000000, "number", NULL);
+            printf("%s🔢 Hash calculado: %lu\n", current_lang.output_prefix, hash % 1000000);
+        } else if (strstr(crypto_cmd, "encriptar")) {
+            char *mensaje = strstr(crypto_cmd, "encriptar") + 10;
+            trim_whitespace(mensaje);
+            printf("%s🔒 Encriptando mensaje: %s\n", current_lang.output_prefix, mensaje);
+            printf("%s🔐 Mensaje encriptado: [DATOS_ENCRIPTADOS]\n", current_lang.output_prefix);
+            set_variable("crypto_encriptado", 1, "number", NULL);
+        } else if (strstr(crypto_cmd, "generar_clave")) {
+            printf("%s🔑 Generando clave criptográfica...\n", current_lang.output_prefix);
+            char clave[17];
+            for (int i = 0; i < 16; i++) {
+                clave[i] = 'A' + rand() % 26;
+            }
+            clave[16] = '\0';
+            printf("%s🗝️ Clave generada: %s\n", current_lang.output_prefix, clave);
+            set_variable("crypto_clave", 0, "string", clave);
+        }
+    }
+    // SISTEMA DE SENSORES IoT
+    else if (strstr(line, "sensor:")) {
+        char *sensor_cmd = strchr(line, ':') + 1;
+        trim_whitespace(sensor_cmd);
+
+        if (strstr(sensor_cmd, "temperatura")) {
+            double temp = 15.0 + (rand() % 250) / 10.0; // 15.0 a 40.0 grados
+            set_variable("sensor_temperatura", temp, "number", NULL);
+            printf("%s🌡️ Temperatura detectada: %.1f°C\n", current_lang.output_prefix, temp);
+        } else if (strstr(sensor_cmd, "humedad")) {
+            double humedad = 30.0 + (rand() % 400) / 10.0; // 30 a 70%
+            set_variable("sensor_humedad", humedad, "number", NULL);
+            printf("%s💧 Humedad detectada: %.1f%%\n", current_lang.output_prefix, humedad);
+        } else if (strstr(sensor_cmd, "luz")) {
+            int luz = rand() % 1024; // 0-1023 (simulando sensor analógico)
+            set_variable("sensor_luz", luz, "number", NULL);
+            printf("%s☀️ Nivel de luz: %d/1023\n", current_lang.output_prefix, luz);
+        } else if (strstr(sensor_cmd, "movimiento")) {
+            int movimiento = rand() % 2;
+            set_variable("sensor_movimiento", movimiento, "number", NULL);
+            printf("%s🚶 Movimiento detectado: %s\n", current_lang.output_prefix, movimiento ? "SÍ" : "NO");
+        }
+    }
+    // SISTEMA DE ANÁLISIS DE DATOS
+    else if (strstr(line, "datos:")) {
+        char *data_cmd = strchr(line, ':') + 1;
+        trim_whitespace(data_cmd);
+
+        if (strstr(data_cmd, "estadisticas")) {
+            char *dataset = strstr(data_cmd, "estadisticas") + 13;
+            trim_whitespace(dataset);
+            printf("%s📊 Calculando estadísticas de: %s\n", current_lang.output_prefix, dataset);
+            
+            // Simular estadísticas
+            double media = 50.0 + (rand() % 1000) / 20.0;
+            double mediana = media + (rand() % 20) - 10;
+            double desviacion = (rand() % 100) / 10.0;
+            
+            set_variable("stats_media", media, "number", NULL);
+            set_variable("stats_mediana", mediana, "number", NULL);
+            set_variable("stats_desviacion", desviacion, "number", NULL);
+            
+            printf("%s📈 Media: %.2f\n", current_lang.output_prefix, media);
+            printf("%s📊 Mediana: %.2f\n", current_lang.output_prefix, mediana);
+            printf("%s📉 Desviación: %.2f\n", current_lang.output_prefix, desviacion);
+        } else if (strstr(data_cmd, "grafico")) {
+            char *tipo = strstr(data_cmd, "grafico") + 8;
+            trim_whitespace(tipo);
+            printf("%s📈 Generando gráfico tipo: %s\n", current_lang.output_prefix, tipo);
+            
+            // ASCII Art simple de gráfico
+            printf("%s┌─────────────────────────┐\n", current_lang.output_prefix);
+            printf("%s│ %s │\n", current_lang.output_prefix, "    GRÁFICO GENERADO    ");
+            printf("%s├─────────────────────────┤\n", current_lang.output_prefix);
+            printf("%s│ ▄▄░░▄▄░░░░▄▄▄▄░░▄▄░░  │\n", current_lang.output_prefix);
+            printf("%s│ ██░░██░░░░████░░██░░  │\n", current_lang.output_prefix);
+            printf("%s│ ██░░██░░░░████░░██░░  │\n", current_lang.output_prefix);
+            printf("%s└─────────────────────────┘\n", current_lang.output_prefix);
+            set_variable("grafico_generado", 1, "number", NULL);
         }
     }
     else if (strstr(line, "debug:")) {
@@ -2147,9 +2453,10 @@ void execute_custom_language(char *lilou_file, char *code_file) {
                 "repetir:", "hacer:", "mientras:", "aleatorio:", "aleatorio_real:", "escribir_archivo:", 
                 "anexar_archivo:", "leer_archivo:", "funcion:", "llamar:", "retornar:", "entrada:", 
                 "esperar:", "limpiar_pantalla", "clear", "debug:", "break", "continue", "romper", "continuar",
-                "algorithme:", "algorythme:", "contador:", "cronometro:", "memoria:", "color:", "ascii_art:", "juego:"
+                "algorithme:", "algorythme:", "contador:", "cronometro:", "memoria:", "color:", "ascii_art:", "juego:",
+                "modulo:", "red:", "bd:", "gui:", "ia:", "crypto:", "sensor:", "datos:"
             };
-            int predefined_count = 36;
+            int predefined_count = 44;
 
             int found = 0;
             for (int i = 0; i < predefined_count; i++) {
@@ -2525,7 +2832,56 @@ void show_features() {
     printf("  • Lancer de dés (1-6)\n");
     printf("  • Pile ou face avec pièce\n");
     printf("  • Tirage de cartes avec valeurs\n");
+    printf("  • Jeu d'adivinanza avec ranges personnalisés\n");
     printf("  • Variables de résultats automatiques\n\n");
+
+    printf("🔧 SYSTÈME DE MODULES:\n");
+    printf("  • Chargement dynamique de modules\n");
+    printf("  • Modules: mathématiques, système, réseau, BD, GUI\n");
+    printf("  • Activation/désactivation à la demande\n");
+    printf("  • Architecture modulaire extensible\n\n");
+
+    printf("🌐 NETWORKING AVANCÉ:\n");
+    printf("  • Ping vers des hôtes distants\n");
+    printf("  • Téléchargement de fichiers avec progression\n");
+    printf("  • Serveur HTTP intégré\n");
+    printf("  • Variables réseau automatiques\n\n");
+
+    printf("🗄️ BASE DE DONNÉES:\n");
+    printf("  • Connexion à bases de données\n");
+    printf("  • Création de tables dynamiques\n");
+    printf("  • Insertion et consultation de données\n");
+    printf("  • Variables de résultats SQL\n\n");
+
+    printf("🖼️ INTERFACE GRAPHIQUE (GUI):\n");
+    printf("  • Création de fenêtres ASCII\n");
+    printf("  • Boutons et menus interactifs\n");
+    printf("  • Interfaces utilisateur textuelles\n");
+    printf("  • Layouts et composants\n\n");
+
+    printf("🤖 INTELLIGENCE ARTIFICIELLE:\n");
+    printf("  • Prédictions basées sur IA\n");
+    printf("  • Classification automatique\n");
+    printf("  • Génération de texte intelligente\n");
+    printf("  • Variables de résultats IA\n\n");
+
+    printf("🔐 CRYPTOGRAPHIE:\n");
+    printf("  • Calcul de hash sécurisés\n");
+    printf("  • Chiffrement de messages\n");
+    printf("  • Génération de clés cryptographiques\n");
+    printf("  • Variables crypto automatiques\n\n");
+
+    printf("🌡️ CAPTEURS IoT:\n");
+    printf("  • Lecture de température\n");
+    printf("  • Mesure d'humidité\n");
+    printf("  • Détection de lumière\n");
+    printf("  • Capteurs de mouvement\n\n");
+
+    printf("📊 ANALYSE DE DONNÉES:\n");
+    printf("  • Calcul de statistiques avancées\n");
+    printf("  • Génération de graphiques ASCII\n");
+    printf("  • Analyse prédictive\n");
+    printf("  • Variables statistiques\n\n");
 
     printf("🐛 DEBUG ULTRA-COMPLETO:\n");
     printf("  • Inspección detallada de variables\n");

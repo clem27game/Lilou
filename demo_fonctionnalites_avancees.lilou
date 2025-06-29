@@ -1,0 +1,110 @@
+
+Lilou programa - lenguaje de programación : DémoAvancé
+
+• Nombre del idioma: TechLang
+• extension: .tech
+• modo_estricto: off
+• sensible_mayusculas: off
+• operadores: +, -, *, /, %, **, =, ==, !=, <, >, <=, >=, and, or, not, &&, ||, xor
+• palabras clave: show, load, net, db, gui, ai, crypto, sensor, data, game, module
+• mensaje de error: ¡Error en TechLang!
+• prefijo de salida: [TechLang] 
+• langage-error: fr
+
+// Démonstration complète de toutes les nouvelles fonctionnalités de Lilou
+
+// === CHARGEMENT DE MODULES ===
+module: matematicas
+module: sistema  
+module: red
+module: bd
+module: gui
+module: crypto
+
+// === VARIABLES ET CALCULS AVANCÉS ===
+variable: version = 4.0
+variable: usuario = "Développeur"
+mostrar: Bienvenue dans TechLang v{version}, {usuario}!
+
+// === NETWORKING ===
+net: ping google.com
+mostrar: Temps de ping: {ping_tiempo}ms
+
+net: servidor 8080
+mostrar: Serveur démarré sur port {servidor_puerto}
+
+// === BASE DE DONNÉES ===
+db: conectar mi_app_db
+db: crear_tabla usuarios
+db: insertar "Juan", 25, "admin"
+db: insertar "Ana", 30, "user"
+db: consultar SELECT * FROM usuarios WHERE age > 20
+mostrar: Requête terminée avec {bd_resultados} résultats
+
+// === INTERFACE GRAPHIQUE ===
+gui: ventana "Application TechLang"
+gui: boton "Démarrer"
+gui: boton "Arrêter"
+gui: menu "Fichier, Édition, Aide"
+
+// === INTELLIGENCE ARTIFICIELLE ===
+ai: prediccion datos_ventes
+mostrar: Prédiction IA: {ia_prediccion}% de probabilité
+ai: clasificar "Message urgent à traiter"
+mostrar: Classification: catégorie {ia_categoria}
+ai: generar_texto "technologie futuriste"
+
+// === CRYPTOGRAPHIE ===
+crypto: hash "mon_message_secret"
+mostrar: Hash calculé: {crypto_hash}
+crypto: generar_clave
+mostrar: Clé générée: {crypto_clave}
+crypto: encriptar "données confidentielles"
+
+// === CAPTEURS IoT ===
+sensor: temperatura
+mostrar: Température ambiante: {sensor_temperatura}°C
+sensor: humedad
+mostrar: Humidité: {sensor_humedad}%
+sensor: luz
+mostrar: Luminosité: {sensor_luz}/1023
+sensor: movimiento
+mostrar: Mouvement détecté: {sensor_movimiento}
+
+// === ANALYSE DE DONNÉES ===
+data: estadisticas dataset_ventas
+mostrar: Statistiques calculées:
+mostrar: - Moyenne: {stats_media}
+mostrar: - Médiane: {stats_mediana}  
+mostrar: - Écart-type: {stats_desviacion}
+
+data: grafico barras
+mostrar: Graphique généré: {grafico_generado}
+
+// === JEUX AVANCÉS ===
+game: adivinanza 50
+mostrar: Nombre secret entre 1 et 50 généré: {numero_secreto}
+
+game: dado
+mostrar: Dé lancé: {dado_resultado}
+
+// === CONDITIONS AVANCÉES ===
+si: (sensor_temperatura > 25) and not (sensor_humedad < 40)
+entonces: mostrar: ⚠️ Conditions climatiques à surveiller!
+
+si: (ia_prediccion > 75) xor (bd_resultados < 5)
+entonces: mostrar: 🎯 Condition XOR de performance satisfaite
+
+// === BOUCLES AVEC NOUVELLES FONCTIONNALITÉS ===
+contador: operations = 0
+repetir: 3
+hacer: contador: operations = ++
+       sensor: temperatura
+       mostrar: Opération {operations}: Temp = {sensor_temperatura}°C
+
+// === DEBUG AVANCÉ ===
+debug: on
+debug: variables
+debug: off
+
+mostrar: === Démonstration TechLang terminée avec succès! ===
