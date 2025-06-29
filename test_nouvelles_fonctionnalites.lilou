@@ -1,0 +1,62 @@
+
+Lilou programa - lenguaje de programación : FonctionnalitésAvancées
+
+• Nombre del idioma: CréatifLang
+• extension: .creatif
+• modo_estricto: off
+• sensible_mayusculas: off
+• operadores: +, -, *, /, %, **, =, ==, !=, <, >, <=, >=, and, or, not, &&, ||, xor
+• palabras clave: show, count, timer, memory, art, game, color, test, check
+• mensaje de error: ¡Error en CréatifLang!
+• prefijo de salida: [CréatifLang] 
+• langage-error: fr
+
+// Test des nouvelles fonctionnalités de conditions
+definir_variable: age = 25
+definir_variable: score = 85
+definir_variable: admin = 1
+
+// Conditions avancées avec NOT et XOR
+si: not (age < 18)
+entonces: mostrar: Tu es majeur!
+
+si: (score > 80) and not (admin == 0)
+entonces: mostrar: Accès autorisé avec score élevé!
+
+si: (age >= 18) xor (score < 50)
+entonces: mostrar: Condition XOR satisfaite
+
+// Test des variables temporaires avec compteurs
+contador: visits = 0
+contador: visits = ++
+contador: visits = ++
+mostrar: Nombre de visites: {visits}
+
+// Test du chronométrage
+cronometro: iniciar
+esperar: 2
+cronometro: parar
+mostrar: Temps mesuré: {cronometro_tiempo} secondes
+
+// Test de la mémoire
+memoria: guardar slot1, 42
+memoria: guardar slot2, {age * 2}
+memoria: cargar slot1
+mostrar: Valeur récupérée: {memoria_cargada}
+
+// Test des couleurs
+color: rojo
+mostrar: Ce texte devrait être en rouge!
+color: reset
+
+// Test de l'art ASCII
+ascii_art: corazon
+ascii_art: estrella
+
+// Test des jeux
+juego: dado
+mostrar: Résultat du dé: {dado_resultado}
+juego: moneda
+mostrar: Résultat pièce: {moneda_resultado}
+juego: carta
+mostrar: Carte tirée - Valeur: {carta_valor}, Palo: {carta_palo}

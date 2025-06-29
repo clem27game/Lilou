@@ -1,0 +1,74 @@
+
+// Programme créatif utilisant toutes les nouvelles fonctionnalités
+
+clear
+
+show: === 🎨 DÉMO DES FONCTIONNALITÉS CRÉATIVES ===
+
+// Variables et conditions avancées
+test: age = 25
+test: niveau = 85
+test: premium = 1
+
+// Conditions avec NOT et operateurs logiques
+check: not (age < 18) and (niveau > 80)
+show: ✅ Utilisateur qualifié: {age} ans, niveau {niveau}
+
+// Système de compteurs pour gamification
+count: points = 100
+count: points = ++
+count: points = ++
+show: 🏆 Points actuels: {points}
+
+// Système de chronométrage
+timer: iniciar
+show: ⏱️ Démarrage du chrono...
+
+// Simulation d'une tâche
+game: dado
+show: 🎲 Lancer de dé: {dado_resultado}
+
+timer: parar
+show: ⏱️ Tâche terminée en {cronometro_tiempo} secondes
+
+// Système de mémoire persistante
+memory: guardar best_score, {points}
+memory: guardar user_level, {nivel}
+show: 💾 Scores sauvegardés
+
+// Art ASCII créatif
+color: azul
+art: estrella
+color: rojo
+art: corazon
+color: verde
+show: 🌟 Art ASCII coloré généré!
+color: reset
+
+// Mini-jeu de hasard
+show: === 🎮 MINI-JEU DE HASARD ===
+game: moneda
+check: moneda_resultado == 1
+show: 🪙 FACE! Tu gagnes 10 points bonus!
+count: points = 10
+
+game: carta
+show: 🃏 Carte tirée: Valeur {carta_valor}
+check: carta_valor > 10
+show: 👑 Carte haute! Bonus de prestige!
+
+// Récupération des données
+memory: cargar best_score
+show: 📊 Meilleur score enregistré: {memoria_cargada}
+
+// Conditions complexes avec parenthèses
+check: (points > 100) and ((carta_valor > 10) or (dado_resultado == 6))
+show: 🏅 Conditions spéciales remplies! Niveau expert atteint!
+
+color: magenta
+show: === 🎉 DÉMO TERMINÉE AVEC SUCCÈS! ===
+color: reset
+
+// Nettoyage final
+memory: limpiar
+show: 🧹 Mémoire nettoyée pour la prochaine session

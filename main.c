@@ -652,16 +652,46 @@ int evaluate_condition(char *condition) {
         printf("[DEBUG] Évaluation condition: '%s'\n", condition);
     }
 
-    // Operadores lógicos (procesarlos primero para evitar problemas de precedencia)
-    if (strstr(condition, " and ") || strstr(condition, " y ")) {
-        char *and_pos = strstr(condition, " and ") ? strstr(condition, " and ") : strstr(condition, " y ");
-        char left[MAX_TOKEN], right[MAX_TOKEN];
+    // Support pour NOT/NON
+    if (strstr(condition, "not ") == condition || strstr(condition, "non ") == condition) {
+        char *negated_condition = condition + (strstr(condition, "not ") == condition ? 4 : 4);
+        trim_whitespace(negated_condition);
+        int result = !evaluate_condition(negated_condition);
+        if (debug_mode) {
+            printf("[DEBUG] NOT '%s' = %d\n", negated_condition, result);
+        }
+        return result;
+    }
 
+    // Support pour parenthèses dans les conditions
+    if (condition[0] == '(' && condition[strlen(condition)-1] == ')') {
+        char inner_condition[MAX_TOKEN];
+        strncpy(inner_condition, condition + 1, strlen(condition) - 2);
+        inner_condition[strlen(condition) - 2] = '\0';
+        return evaluate_condition(inner_condition);
+    }
+
+    // Operadores lógicos avancés (procesarlos primero para evitar problemas de precedencia)
+    if (strstr(condition, " and ") || strstr(condition, " y ") || strstr(condition, " && ")) {
+        char *and_pos = NULL;
+        int skip_len = 0;
+        
+        if (strstr(condition, " && ")) {
+            and_pos = strstr(condition, " && ");
+            skip_len = 4;
+        } else if (strstr(condition, " and ")) {
+            and_pos = strstr(condition, " and ");
+            skip_len = 5;
+        } else {
+            and_pos = strstr(condition, " y ");
+            skip_len = 3;
+        }
+        
+        char left[MAX_TOKEN], right[MAX_TOKEN];
         int left_len = and_pos - condition;
         strncpy(left, condition, left_len);
         left[left_len] = '\0';
-
-        strcpy(right, and_pos + (strstr(condition, " and ") ? 5 : 3));
+        strcpy(right, and_pos + skip_len);
 
         int left_result = evaluate_condition(left);
         int right_result = evaluate_condition(right);
@@ -674,17 +704,43 @@ int evaluate_condition(char *condition) {
         return final_result;
     }
 
-    if (strstr(condition, " or ") || strstr(condition, " o ")) {
-        char *or_pos = strstr(condition, " or ") ? strstr(condition, " or ") : strstr(condition, " o ");
+    if (strstr(condition, " or ") || strstr(condition, " o ") || strstr(condition, " || ")) {
+        char *or_pos = NULL;
+        int skip_len = 0;
+        
+        if (strstr(condition, " || ")) {
+            or_pos = strstr(condition, " || ");
+            skip_len = 4;
+        } else if (strstr(condition, " or ")) {
+            or_pos = strstr(condition, " or ");
+            skip_len = 4;
+        } else {
+            or_pos = strstr(condition, " o ");
+            skip_len = 3;
+        }
+        
         char left[MAX_TOKEN], right[MAX_TOKEN];
-
         int left_len = or_pos - condition;
         strncpy(left, condition, left_len);
         left[left_len] = '\0';
-
-        strcpy(right, or_pos + (strstr(condition, " or ") ? 4 : 3));
+        strcpy(right, or_pos + skip_len);
 
         return evaluate_condition(left) || evaluate_condition(right);
+    }
+
+    // Support pour XOR
+    if (strstr(condition, " xor ")) {
+        char *xor_pos = strstr(condition, " xor ");
+        char left[MAX_TOKEN], right[MAX_TOKEN];
+
+        int left_len = xor_pos - condition;
+        strncpy(left, condition, left_len);
+        left[left_len] = '\0';
+        strcpy(right, xor_pos + 5);
+
+        int left_result = evaluate_condition(left);
+        int right_result = evaluate_condition(right);
+        return (left_result && !right_result) || (!left_result && right_result);
     }
 
     // Operadores de comparación
@@ -1029,6 +1085,42 @@ void map_custom_keyword_to_internal(char *line, char *output, char *custom_keywo
              strcmp(custom_keyword, "algoritmo") == 0 ||
              strcmp(custom_keyword, "calc_simple") == 0) {
         snprintf(output, MAX_LINE, "algorithme: %s", content);
+    }
+    // Mots-clés de compteurs
+    else if (strcmp(custom_keyword, "counter") == 0 || 
+             strcmp(custom_keyword, "count") == 0 ||
+             strcmp(custom_keyword, "compteur") == 0) {
+        snprintf(output, MAX_LINE, "contador: %s", content);
+    }
+    // Mots-clés de chronométrage
+    else if (strcmp(custom_keyword, "timer") == 0 || 
+             strcmp(custom_keyword, "chrono") == 0 ||
+             strcmp(custom_keyword, "tiempo") == 0) {
+        snprintf(output, MAX_LINE, "cronometro: %s", content);
+    }
+    // Mots-clés de mémoire
+    else if (strcmp(custom_keyword, "memory") == 0 || 
+             strcmp(custom_keyword, "mem") == 0 ||
+             strcmp(custom_keyword, "memoire") == 0) {
+        snprintf(output, MAX_LINE, "memoria: %s", content);
+    }
+    // Mots-clés de couleurs
+    else if (strcmp(custom_keyword, "color") == 0 || 
+             strcmp(custom_keyword, "colour") == 0 ||
+             strcmp(custom_keyword, "couleur") == 0) {
+        snprintf(output, MAX_LINE, "color: %s", content);
+    }
+    // Mots-clés d'art ASCII
+    else if (strcmp(custom_keyword, "art") == 0 || 
+             strcmp(custom_keyword, "ascii") == 0 ||
+             strcmp(custom_keyword, "dibujo") == 0) {
+        snprintf(output, MAX_LINE, "ascii_art: %s", content);
+    }
+    // Mots-clés de jeux
+    else if (strcmp(custom_keyword, "game") == 0 || 
+             strcmp(custom_keyword, "jeu") == 0 ||
+             strcmp(custom_keyword, "jugar") == 0) {
+        snprintf(output, MAX_LINE, "juego: %s", content);
     }
     else {
         // Pour TOUS les autres mots-clés personnalisés, les traiter comme des commandes d'affichage
@@ -1765,6 +1857,182 @@ void parse_lilou_definition(char *line) {
             printf("💡 Indice: Tu voulais peut-être dire 'algorithme:' (sans le 'y' musical)\n");
         }
     }
+    else if (strstr(line, "contador:")) {
+        char *counter_start = strchr(line, ':') + 1;
+        trim_whitespace(counter_start);
+
+        char *equal_pos = strchr(counter_start, '=');
+        if (equal_pos) {
+            char counter_name[MAX_TOKEN];
+            int name_len = equal_pos - counter_start;
+            strncpy(counter_name, counter_start, name_len);
+            counter_name[name_len] = '\0';
+            trim_whitespace(counter_name);
+
+            char *op_pos = equal_pos + 1;
+            trim_whitespace(op_pos);
+
+            if (strstr(op_pos, "++")) {
+                double current_val = get_variable_value(counter_name);
+                set_variable(counter_name, current_val + 1, "number", NULL);
+                printf("%s📊 Contador '%s' incrementado: %.0f\n", 
+                       current_lang.output_prefix, counter_name, current_val + 1);
+            } else if (strstr(op_pos, "--")) {
+                double current_val = get_variable_value(counter_name);
+                set_variable(counter_name, current_val - 1, "number", NULL);
+                printf("%s📊 Contador '%s' decrementado: %.0f\n", 
+                       current_lang.output_prefix, counter_name, current_val - 1);
+            } else if (strstr(op_pos, "reset")) {
+                set_variable(counter_name, 0, "number", NULL);
+                printf("%s📊 Contador '%s' reiniciado a 0\n", 
+                       current_lang.output_prefix, counter_name);
+            } else {
+                double init_val = evaluate_expression(op_pos);
+                set_variable(counter_name, init_val, "number", NULL);
+                printf("%s📊 Contador '%s' inicializado: %.0f\n", 
+                       current_lang.output_prefix, counter_name, init_val);
+            }
+        }
+    }
+    else if (strstr(line, "cronometro:")) {
+        char *timer_cmd = strchr(line, ':') + 1;
+        trim_whitespace(timer_cmd);
+
+        if (strstr(timer_cmd, "iniciar")) {
+            set_variable("cronometro_inicio", time(NULL), "number", NULL);
+            printf("%s⏱️ Cronómetro iniciado\n", current_lang.output_prefix);
+        } else if (strstr(timer_cmd, "parar") || strstr(timer_cmd, "detener")) {
+            double inicio = get_variable_value("cronometro_inicio");
+            double transcurrido = time(NULL) - inicio;
+            set_variable("cronometro_tiempo", transcurrido, "number", NULL);
+            printf("%s⏱️ Cronómetro detenido: %.0f segundos\n", 
+                   current_lang.output_prefix, transcurrido);
+        } else if (strstr(timer_cmd, "ver") || strstr(timer_cmd, "mostrar")) {
+            double inicio = get_variable_value("cronometro_inicio");
+            double transcurrido = time(NULL) - inicio;
+            printf("%s⏱️ Tiempo transcurrido: %.0f segundos\n", 
+                   current_lang.output_prefix, transcurrido);
+        }
+    }
+    else if (strstr(line, "memoria:")) {
+        char *memory_cmd = strchr(line, ':') + 1;
+        trim_whitespace(memory_cmd);
+
+        if (strstr(memory_cmd, "guardar ")) {
+            char *save_start = strstr(memory_cmd, "guardar ") + 8;
+            char *comma_pos = strchr(save_start, ',');
+            if (comma_pos) {
+                char slot[MAX_TOKEN], value_str[MAX_TOKEN];
+                int slot_len = comma_pos - save_start;
+                strncpy(slot, save_start, slot_len);
+                slot[slot_len] = '\0';
+                trim_whitespace(slot);
+                
+                strcpy(value_str, comma_pos + 1);
+                trim_whitespace(value_str);
+                
+                char memory_var[MAX_TOKEN];
+                snprintf(memory_var, sizeof(memory_var), "memoria_%s", slot);
+                
+                double value = evaluate_expression(value_str);
+                set_variable(memory_var, value, "number", NULL);
+                printf("%s💾 Guardado en memoria [%s]: %.6g\n", 
+                       current_lang.output_prefix, slot, value);
+            }
+        } else if (strstr(memory_cmd, "cargar ")) {
+            char *load_start = strstr(memory_cmd, "cargar ") + 7;
+            trim_whitespace(load_start);
+            
+            char memory_var[MAX_TOKEN];
+            snprintf(memory_var, sizeof(memory_var), "memoria_%s", load_start);
+            
+            double value = get_variable_value(memory_var);
+            set_variable("memoria_cargada", value, "number", NULL);
+            printf("%s💾 Cargado de memoria [%s]: %.6g\n", 
+                   current_lang.output_prefix, load_start, value);
+        } else if (strstr(memory_cmd, "limpiar")) {
+            // Limpiar todas las variables que empiecen con "memoria_"
+            for (int i = 0; i < current_lang.var_count; i++) {
+                if (strstr(current_lang.variables[i].name, "memoria_") == current_lang.variables[i].name) {
+                    current_lang.variables[i].value = 0;
+                }
+            }
+            printf("%s💾 Memoria limpiada\n", current_lang.output_prefix);
+        }
+    }
+    else if (strstr(line, "color:")) {
+        char *color_cmd = strchr(line, ':') + 1;
+        trim_whitespace(color_cmd);
+
+        if (strstr(color_cmd, "rojo")) {
+            printf("\033[31m%sTexto en rojo\033[0m\n", current_lang.output_prefix);
+        } else if (strstr(color_cmd, "verde")) {
+            printf("\033[32m%sTexto en verde\033[0m\n", current_lang.output_prefix);
+        } else if (strstr(color_cmd, "azul")) {
+            printf("\033[34m%sTexto en azul\033[0m\n", current_lang.output_prefix);
+        } else if (strstr(color_cmd, "amarillo")) {
+            printf("\033[33m%sTexto en amarillo\033[0m\n", current_lang.output_prefix);
+        } else if (strstr(color_cmd, "magenta")) {
+            printf("\033[35m%sTexto en magenta\033[0m\n", current_lang.output_prefix);
+        } else if (strstr(color_cmd, "cian")) {
+            printf("\033[36m%sTexto en cian\033[0m\n", current_lang.output_prefix);
+        } else if (strstr(color_cmd, "reset")) {
+            printf("\033[0m%sColores reseteados\n", current_lang.output_prefix);
+        } else {
+            char interpolated[MAX_LINE];
+            interpolate_string(color_cmd, interpolated);
+            printf("\033[37m%s%s\033[0m\n", current_lang.output_prefix, interpolated);
+        }
+    }
+    else if (strstr(line, "ascii_art:")) {
+        char *art_cmd = strchr(line, ':') + 1;
+        trim_whitespace(art_cmd);
+
+        if (strstr(art_cmd, "corazon") || strstr(art_cmd, "heart")) {
+            printf("%s  ♥♥♥    ♥♥♥\n", current_lang.output_prefix);
+            printf("%s ♥♥♥♥♥  ♥♥♥♥♥\n", current_lang.output_prefix);
+            printf("%s ♥♥♥♥♥♥♥♥♥♥♥\n", current_lang.output_prefix);
+            printf("%s  ♥♥♥♥♥♥♥♥♥\n", current_lang.output_prefix);
+            printf("%s    ♥♥♥♥♥\n", current_lang.output_prefix);
+            printf("%s      ♥\n", current_lang.output_prefix);
+        } else if (strstr(art_cmd, "estrella") || strstr(art_cmd, "star")) {
+            printf("%s    ★\n", current_lang.output_prefix);
+            printf("%s   ★★★\n", current_lang.output_prefix);
+            printf("%s  ★★★★★\n", current_lang.output_prefix);
+            printf("%s   ★★★\n", current_lang.output_prefix);
+            printf("%s    ★\n", current_lang.output_prefix);
+        } else if (strstr(art_cmd, "flecha") || strstr(art_cmd, "arrow")) {
+            printf("%s    ▲\n", current_lang.output_prefix);
+            printf("%s   ▲▲▲\n", current_lang.output_prefix);
+            printf("%s  ▲▲▲▲▲\n", current_lang.output_prefix);
+            printf("%s ▲▲▲▲▲▲▲\n", current_lang.output_prefix);
+            printf("%s    █\n", current_lang.output_prefix);
+            printf("%s    █\n", current_lang.output_prefix);
+        }
+    }
+    else if (strstr(line, "juego:")) {
+        char *game_cmd = strchr(line, ':') + 1;
+        trim_whitespace(game_cmd);
+
+        if (strstr(game_cmd, "dado")) {
+            int resultado = 1 + rand() % 6;
+            set_variable("dado_resultado", resultado, "number", NULL);
+            printf("%s🎲 Has lanzado el dado: %d\n", current_lang.output_prefix, resultado);
+        } else if (strstr(game_cmd, "moneda")) {
+            int resultado = rand() % 2;
+            set_variable("moneda_resultado", resultado, "number", NULL);
+            printf("%s🪙 Moneda lanzada: %s\n", current_lang.output_prefix, 
+                   resultado ? "Cara" : "Cruz");
+        } else if (strstr(game_cmd, "carta")) {
+            char *palos[] = {"♠", "♥", "♦", "♣"};
+            char *valores[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+            int palo = rand() % 4;
+            int valor = rand() % 13;
+            printf("%s🃏 Carta extraída: %s%s\n", current_lang.output_prefix, valores[valor], palos[palo]);
+            set_variable("carta_valor", valor + 1, "number", NULL);
+            set_variable("carta_palo", palo, "number", NULL);
+        }
+    }
     else if (strstr(line, "debug:")) {
         char *debug_cmd = strchr(line, ':') + 1;
         trim_whitespace(debug_cmd);
@@ -1879,9 +2147,9 @@ void execute_custom_language(char *lilou_file, char *code_file) {
                 "repetir:", "hacer:", "mientras:", "aleatorio:", "aleatorio_real:", "escribir_archivo:", 
                 "anexar_archivo:", "leer_archivo:", "funcion:", "llamar:", "retornar:", "entrada:", 
                 "esperar:", "limpiar_pantalla", "clear", "debug:", "break", "continue", "romper", "continuar",
-                "algorithme:", "algorythme:"
+                "algorithme:", "algorythme:", "contador:", "cronometro:", "memoria:", "color:", "ascii_art:", "juego:"
             };
-            int predefined_count = 30;
+            int predefined_count = 36;
 
             int found = 0;
             for (int i = 0; i < predefined_count; i++) {
@@ -2216,6 +2484,48 @@ void show_features() {
     printf("  • Variables de entrada correctamente asignadas\n");
     printf("  • Conversión string/número automática\n");
     printf("  • Validación de entrada mejorada\n\n");
+
+    printf("🔄 CONDICIONES AVANÇADAS (NOUVELLES):\n");
+    printf("  • Opérateurs NOT/NON pour négation\n");
+    printf("  • Support des parenthèses dans les conditions\n");
+    printf("  • Opérateurs logiques: &&, ||, and, or, xor\n");
+    printf("  • Conditions complexes avec priorité\n\n");
+
+    printf("📊 SYSTÈME DE COMPTEURS:\n");
+    printf("  • Compteurs avec incrémentation/décrémentation\n");
+    printf("  • Opérations: ++, --, reset\n");
+    printf("  • Parfait pour la gamification\n");
+    printf("  • Variables de comptage automatiques\n\n");
+
+    printf("⏱️ CHRONOMÉTRAGE AVANCÉ:\n");
+    printf("  • Démarrage/arrêt de chronomètres\n");
+    printf("  • Mesure précise du temps\n");
+    printf("  • Variables temporelles automatiques\n");
+    printf("  • Benchmarking de code\n\n");
+
+    printf("💾 SYSTÈME DE MÉMOIRE:\n");
+    printf("  • Sauvegarde dans des slots nommés\n");
+    printf("  • Chargement de valeurs persistantes\n");
+    printf("  • Nettoyage de mémoire sélectif\n");
+    printf("  • Stockage de données entre executions\n\n");
+
+    printf("🎨 AFFICHAGE COLORÉ:\n");
+    printf("  • Support des couleurs ANSI\n");
+    printf("  • Rouge, vert, bleu, jaune, magenta, cian\n");
+    printf("  • Reset automatique des couleurs\n");
+    printf("  • Interface utilisateur attractive\n\n");
+
+    printf("🎨 ART ASCII INTÉGRÉ:\n");
+    printf("  • Dessins prédéfinis: cœur, étoile, flèche\n");
+    printf("  • Interface graphique textuelle\n");
+    printf("  • Éléments visuels pour les applications\n");
+    printf("  • Personnalisation créative\n\n");
+
+    printf("🎮 SYSTÈME DE JEUX:\n");
+    printf("  • Lancer de dés (1-6)\n");
+    printf("  • Pile ou face avec pièce\n");
+    printf("  • Tirage de cartes avec valeurs\n");
+    printf("  • Variables de résultats automatiques\n\n");
 
     printf("🐛 DEBUG ULTRA-COMPLETO:\n");
     printf("  • Inspección detallada de variables\n");
