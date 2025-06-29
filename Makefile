@@ -1,9 +1,6 @@
-
-# Makefile para Lilou 3.0 - Meta-lenguaje de programación avanzado
-
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -O2
-DEBUG_CFLAGS = -Wall -Wextra -std=c99 -g -DDEBUG -O0
+CFLAGS = -Wall -Wextra -std=c99 -O2 -D_GNU_SOURCE
+DEBUG_CFLAGS = -Wall -Wextra -std=c99 -g -DDEBUG -O0 -D_GNU_SOURCE
 LIBS = -lm
 TARGET = main
 DEBUG_TARGET = main-debug

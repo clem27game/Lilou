@@ -1,4 +1,5 @@
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +8,15 @@
 #include <math.h>
 #include <unistd.h>
 #include <strings.h>
+
+// Définir les constantes mathématiques si elles ne sont pas disponibles
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+#ifndef M_E
+#define M_E 2.7182818284590452354
+#endif
 
 #define MAX_LINE 2048
 #define MAX_TOKEN 512
@@ -1322,8 +1332,6 @@ void parse_lilou_definition(char *line) {
         current_lang.loop_active = 1;
         current_lang.break_flag = 0;
         current_lang.continue_flag = 0;
-        int while_iterations = 0;
-        const int MAX_WHILE_ITERATIONS = 10000;
         
         if (debug_mode) {
             printf("[DEBUG] Iniciando bucle mientras con condición: %s\n", condition_start);
@@ -1650,14 +1658,18 @@ void parse_lilou_definition(char *line) {
         #ifdef _WIN32
             Sleep(milliseconds);
         #else
-            usleep(milliseconds * 1000);
+            usleep((useconds_t)(milliseconds * 1000));
         #endif
     }
     else if (strstr(line, "limpiar_pantalla") || strstr(line, "clear")) {
         #ifdef _WIN32
-            system("cls");
+            if (system("cls") == -1) {
+                printf("Erreur lors du nettoyage de l'écran\n");
+            }
         #else
-            system("clear");
+            if (system("clear") == -1) {
+                printf("Erreur lors du nettoyage de l'écran\n");
+            }
         #endif
         printf("%sPantalla limpiada\n", current_lang.output_prefix);
     }
