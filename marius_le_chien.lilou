@@ -10,11 +10,11 @@ Lilou programa - lenguaje de programación : MariusLeChien
 • prefijo de salida: [MariusLeChien] 
 
 // === DÉFINITIONS PERSONNALISÉES POUR MARIUS ===
-definir_variable: age_marius = 7
-definir_variable: poids_marius = 25.5
-definir_variable: race_marius = "Berger Allemand"
+definir_variable: age_marius = 8
+definir_variable: poids_marius = 15.5
+definir_variable: race_marius = "Bouldog français"
 definir_variable: est_sourd = 1
-definir_variable: couleur_pelage = "noir et feu"
+definir_variable: couleur_pelage = "bringé"
 
 definir_constante: pi
 definir_constante: taille_gamelle_standard = 2.5
