@@ -1,11 +1,17 @@
 
 **🌸🩷 Lilou - langage de programmation écrit en espagnol pour crée facilement des mini-langages de programmation personnalisés ! ❤️**
 
+- **Lilou - lenguaje de programación escrito en español para crear fácilmente mini-lenguajes de programación personalizados**
+  
 # 🌟 LILOU 3.0 - Meta-lenguaje de Programación Ultra-Avanzado
 
 ![Lilou](http://www.image-heberg.fr/files/17511224924163408394.png)
 
-¡Bienvenido a **Lilou 3.0**! El meta-lenguaje de programación más completo y avanzado que te permite crear lenguajes de programación completos con funcionalidades profesionales, ¡todo en español!
+Bienvenido al lenguaje de programación ``🩷Lilou🩷``. Lilou es un lenguaje de programación que te permite crear prototipos de tu propio lenguaje de programación completo. ¿Siempre has soñado con crear tu propio lenguaje de programación? Ahora es posible con el lenguaje de programación Lilou y la plataforma Imaginia.
+Ahora puedes crear prototipos de tus ideas más locas con Lilou y, a continuación, generar código fuente real (intérprete) para dar vida a tu creación con Imaginia.
+Imaginia está disponible en este enlace :
+
+https://imaginia-tetrq1w9.adaptive.ai/?_ogb=true&_evid=Ym2nTx6kkxbZ76Br
 
 ## 🚀 ¡NUEVAS FUNCIONALIDADES REVOLUCIONARIAS EN v3.0!
 
