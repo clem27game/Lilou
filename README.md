@@ -7,11 +7,12 @@
 
 ![Lilou](http://www.image-heberg.fr/files/17511224924163408394.png)
 
-Bienvenido al lenguaje de programación ``🩷Lilou🩷``. Lilou es un lenguaje de programación que te permite crear prototipos de tu propio lenguaje de programación completo. ¿Siempre has soñado con crear tu propio lenguaje de programación? Ahora es posible con el lenguaje de programación Lilou y la plataforma Imaginia.
-Ahora puedes crear prototipos de tus ideas más locas con Lilou y, a continuación, generar código fuente real (intérprete) para dar vida a tu creación con Imaginia.
-Imaginia está disponible en este enlace :
+Bienvenido al lenguaje de programación ``🩷 Lilou 🩷``,
+el que te permite crear tus propios lenguajes de programación!
+puedes crear prototipos de tus propios lenguajes de programación con lilou en tu IDE favorito! ¡Pero eso no es todo! Puedes convertir tu idea en un lenguaje de programación real y funcional yendo a nuestra plataforma lilou, subiendo tu código en Lilou (.lilou) a la plataforma, ¡y generando un intérprete de C real y funcional con IA para tu propio lenguaje de programación! Por supuesto, ¡puedes descargarte el intérprete en tu dispositivo! ¡Ahora Lilou te permite crear verdaderos lenguajes de programación!
+Aquí tienes el enlace a nuestra plataforma;
 
-https://imaginia-tetrq1w9.adaptive.ai/?_ogb=true&_evid=Ym2nTx6kkxbZ76Br
+https://lilou-7vvvuopx.adaptive.ai/?_ogb=true&_evid=KgDyKwGBCZxbiMpq
 
 ## 🚀 ¡NUEVAS FUNCIONALIDADES REVOLUCIONARIAS EN v3.0!
 
